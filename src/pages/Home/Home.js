@@ -1,16 +1,17 @@
 import React, { useState,useEffect } from 'react'
 import Box from '@mui/material/Box';
-import Faq from './Faq/Faq'
 import HomeCarousel from './HomeCarousel/HomeCarousel'
 import { Typography } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useSelector } from 'react-redux';
 
-import './Home.scss'
+import CustomModal from '../../Utils/Modals/CustomModal';
+import Faq from './Faq/Faq'
+
 import Image1 from '../../assets/img/themes/main/homeimage1.jpg'
 import Image2 from '../../assets/img/themes/main/homeimage2.jpg'
 import Logo from '../../assets/img/themes/main/logo.3.png'
-import CustomModal from '../../Utils/Modals/CustomModal';
+
+import './Home.scss'
 
 const theme = createTheme({
   palette:{
@@ -28,9 +29,6 @@ const theme = createTheme({
 // function Home() {
 function Home ( ) {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const isLogUser = useSelector((state) => state.user.isLogUser);
-  const isLogKid = useSelector((state) => state.kid.isLogKid);
 
   useEffect(() => {
     // Récupérer des données du localStorage

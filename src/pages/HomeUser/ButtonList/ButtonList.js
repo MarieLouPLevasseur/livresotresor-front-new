@@ -1,16 +1,11 @@
-import React, { useEffect }from 'react'
 import Box from '@mui/material/Box'
 import Fab from '@mui/material/Fab'
-// import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
 import { useDispatch } from 'react-redux';
-
-import { userKidId, userKidUsername, userKidAvatar,userKidFirstname } from "../../../Utils/Slices/login/userSlice"
 import {  Link } from 'react-router-dom';
 
+import { userKidId, userKidUsername, userKidAvatar,userKidFirstname } from "../../../Utils/Slices/login/userSlice"
 
 function ButtonList( {kidId, username, avatar,firstname}){
   const dispatch = useDispatch();

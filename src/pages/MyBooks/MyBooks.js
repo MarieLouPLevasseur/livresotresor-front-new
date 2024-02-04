@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { TextField, Box, Button, Typography, Pagination, Card, CardMedia, CardContent, CardActions } from '@mui/material'
+import { TextField, Box, Button, Typography, Pagination, Card, CardMedia, CardContent } from '@mui/material'
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -11,11 +11,9 @@ import { Link } from 'react-router-dom';
 
 import HomeCarousel from '../Home/HomeCarousel/HomeCarousel';
 import HomeKidButtons from '../HomeKid/HomeKidButtons/HomeKidButtons';
-import SearchBar from '../Search/SearchBar/SearchBar';
 import usePagination from "../Search/UsePagination";
 import Loading from '../../Utils/Loading/Loading';
 import BookIconeMenu from '../Book/BookIconeMenu/BookIconeMenu';
-import BookMenu from '../Book/BookMenu/BookMenu';
 import { handleErrors } from '../../Utils/Errors/handleErrors'
 
 import './MyBooks.scss';
@@ -54,7 +52,7 @@ function MyBooks() {
 
   // Local Search State
   const [Search, setSearch] = useState('');
-  const [itemToSearch, setItemToSearch] = useState('');
+  const [itemToSearch] = useState('');
 
   // Redux-toolkit state import
   const apiUrl = useSelector((state) => state.api.apiUrl);
@@ -62,8 +60,6 @@ function MyBooks() {
   // *************************
   // Set datas if User or Kid
   const isLogUser = useSelector((state) => state.user.isLogUser);
-  const isLogKid = useSelector((state) => state.kid.isLogKid);
-
 
   // set token
   const token = useSelector(state => {
@@ -168,7 +164,7 @@ function MyBooks() {
         })
     }
 
-  }, [kidId, itemToSearch]);
+  }, [kidId, itemToSearch,apiEndpointAllBooks,apiEndpointAuthors,apiEndpointCategories,apiEndpointCollections,apiUrl,token]);
 
   // Handle Functions
   const handleChangeRead = () => {
@@ -196,7 +192,7 @@ function MyBooks() {
     // console.log("valeur de Cards: ", Cards)
 
     const categoryFiltered = Cards.filter((books) => {
-      return (books.category.name == categorySelected);
+      return (books.category.name === categorySelected);
     });
     // console.log("Filtre par la catégorie (categoryFiltered): ", categoryFiltered)
     setCardsFilter(categoryFiltered);
@@ -214,7 +210,7 @@ function MyBooks() {
     setCollection("");
     // console.log("info entrant dans handleChangeAuthor: ", authorSelected)
     const authorFiltered = Cards.filter((books) => {
-      return (books.book.authors[0].name == authorSelected);
+      return (books.book.authors[0].name === authorSelected);
     });
     // console.log("Filtre par author (authorFiltered): ", authorFiltered)
 
@@ -231,7 +227,7 @@ function MyBooks() {
     // console.log("info entrant dans handleChangeCollection: ", collectionSelected)
     const collectionFiltered = Cards.filter((books) => {
 
-      return (books.series !== null ? books.series.name == collectionSelected : null == collection);
+      return (books.series !== null ? books.series.name === collectionSelected : null === collection);
     });
     // console.log("Filtre par collection (collectionFiltered): ", collectionFiltered)
 
@@ -272,12 +268,11 @@ function MyBooks() {
           <BookIconeMenu/>
           {/* ------GLOBAL BAR-------- */}
           <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center', ml:{xs:'3%', sm:'0%'}  }} >
-          <Box sx={{ display: 'flex', width: '70%', flexDirection: 'column', alignItems: 'center', ml: {xs:'3%', sm:'0%'} }}>              {/* <SearchBar search={Search} setSearch={setSearch} setItemToSearch={setItemToSearch} /> */}
+          <Box sx={{ display: 'flex', width: '70%', flexDirection: 'column', alignItems: 'center', ml: {xs:'3%', sm:'0%'} }}> 
               {/* ------------SEARCH BAR CHOICE ----------------------*/}
               <Box
                 component="form"
                 onSubmit={(e) => {
-                  // setItemToSearch({Search})
                   e.preventDefault()
                   handleSubmitSearch({ Search })
                   setSearch("")

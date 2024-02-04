@@ -27,7 +27,6 @@ import './Register.scss';
 import Image from '../../assets/img/themes/main/register.jpg';
 import PasswordStrengthMeter from '../../Utils/Passwords/PasswordStrengthMeter/PasswordStrengthMeter';
 import { handleErrors } from '../../Utils/Errors/handleErrors'
-import Spinner from '../../Utils/Loading/Spinner';
 
 function Copyright(props) {
   return (
@@ -98,7 +97,7 @@ export default function Register() {
 
   // error control
   const [emailError, setEmailError] = useState(false);
-  const [passwordValidityError, setPasswordValidityError] = useState(false);
+  const [passwordValidityError] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
 
   //alert snackbar control
@@ -126,26 +125,9 @@ export default function Register() {
     }
   };
 
-  // const checkPasswordValidity = () => {
-  //   if (
-  //     passwordValue.match(
-  //       // minimum 8 character: minimum: 1 lowercase, 1 uppercase, 1 special character
-  //       "^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$"
-
-  //     )
-  //   ) {
-  //     setPasswordValidityError(true);
-  //   } else {
-  //     setPasswordValidityError(false);
-  //   }
-  // };
 
   const checkPasswordMatch = () => {
-    // console.log("------- Password Matchs-----------")
 
-    // console.log(passwordValue, " Valeur mot de passe  ")
-    // console.log(verifiedPasswordValue, " Valeur Vérification mot de passe ")
-    // console.log(passwordValue === verifiedPasswordValue, " Les mot de passe sont égaux? ")
     if (passwordValue !== verifiedPasswordValue) {
       setPasswordMatchError(true);
     } else {

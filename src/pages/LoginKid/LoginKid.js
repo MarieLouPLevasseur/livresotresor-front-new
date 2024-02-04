@@ -26,8 +26,6 @@ import './LoginKid.scss';
 import OpenEye from '../../assets/img/themes/main/oeil_ouvert.png';
 import CloseEye from '../../assets/img/themes/main/oeil_ferme.png';
 import { useTogglePasswordVisibility } from '../../Utils/Passwords/useTogglePasswordVisibility';
-import Spinner from '../../Utils/Loading/Spinner';
-
 
 function Copyright(props) {
   return (

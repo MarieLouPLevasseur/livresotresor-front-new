@@ -10,10 +10,12 @@ import HomeCarousel from '../Home/HomeCarousel/HomeCarousel';
 import HomeKidButtons from './HomeKidButtons/HomeKidButtons';
 import HomeKidProgressBar from './HomeKidProgressBar/HomeKidProgressBar';
 import Loading from '../../Utils/Loading/Loading';
-import defaultCover from '../../assets/img/themes/main/defaultCover.jpg'
-import './HomeKid.scss';
-import BookIconeMenu from '../Book/BookIconeMenu/BookIconeMenu';
 import { handleErrors } from '../../Utils/Errors/handleErrors'
+import BookIconeMenu from '../Book/BookIconeMenu/BookIconeMenu';
+
+import defaultCover from '../../assets/img/themes/main/defaultCover.jpg'
+
+import './HomeKid.scss';
 
 function HomeKid() {
  
@@ -39,10 +41,8 @@ function HomeKid() {
   // set username
     const username = useSelector(state => {
       if(isLogUser) {
-          // return state.user.kidUsername
           return state.user.kidFirstname
       }
-      // return state.kid.username;
       return state.kid.firstname;
      })
 
@@ -102,8 +102,7 @@ function HomeKid() {
     }
     })
     .then((response) => {
-      // console.log(response)
-      // console.log(response.data)
+
       if(response.data !== ""){
 
         setLastBookValue(response.data);
@@ -116,7 +115,7 @@ function HomeKid() {
       handleErrors(error)
     })
   }
-  }, [id]);
+  }, [id,apiEndpointLastBook,apiEndpointProgress,apiUrl, dispatch, token]);
   
   if (loadingLastBookValue || loadingProgressValue) {
     return <Loading/>

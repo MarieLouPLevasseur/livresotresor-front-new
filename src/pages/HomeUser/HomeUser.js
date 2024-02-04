@@ -53,7 +53,7 @@ function HomeUser() {
 
     
   }
-  }, [id]);
+  }, [id,apiEndpointKids,apiUrl,token]);
   
   if (loadinKidsValue ) {
     return <Loading/>

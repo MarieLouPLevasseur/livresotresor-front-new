@@ -17,7 +17,7 @@ function Tutorial() {
     <div>
       
       <HomeCarousel />
-        <Box sx={{m:10,  width: {xs:"100%", lg: "70%"}, m:'auto'}}>
+        <Box sx={{ width: {xs:"100%", lg: "70%"}, m:'auto'}}>
           <Typography sx={{ mt: 3, mb: 3, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 40, letterSpacing: 2, color: '#4462A5' }}>
               Tutoriel
           </Typography>

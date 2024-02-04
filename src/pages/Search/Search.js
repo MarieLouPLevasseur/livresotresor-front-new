@@ -2,50 +2,29 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { Box, Button, Typography, Pagination, Card, CardMedia, CardContent, CardActions, TextField } from '@mui/material'
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
 
-import './SearchBar/SearchBar.scss'
-import { AirlineSeatLegroomExtraOutlined, Padding, WorkHistoryTwoTone } from '@mui/icons-material'
 import { handleErrors } from '../../Utils/Errors/handleErrors'
-
-
 import HomeCarousel from '../Home/HomeCarousel/HomeCarousel'
 import HomeKidButtons from '../HomeKid/HomeKidButtons/HomeKidButtons'
-// import SearchBar from './SearchBar/SearchBar';
 import usePagination from "./UsePagination";
 import Loading from '../../Utils/Loading/Loading';
-import ImgCard from '../../assets/img/themes/main/defaultCover.jpg'
 import BookIconeMenu from '../Book/BookIconeMenu/BookIconeMenu';
 import { searchBookIsbn, searchBookCover, searchBookTitle, searchBookDescription, searchBookAuthors, searchBookPublisher } from '../../Utils/Slices/book/searchBookSlice';
 
-
 import './Search.scss'
-import { toBeEmpty } from '@testing-library/jest-dom/dist/matchers';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#4462A5',
-    }
-  },
-  typography: {
-    fontFamily: [
-      'Montserrat'
-    ]
-  }
-});
+import './SearchBar/SearchBar.scss'
 
 function Search() {
 
-  const [searchQuery, setSearchQuery] = useState('');
+  // const [searchQuery, setSearchQuery] = useState('');
 
 
   // Local state
   const [Cards, setCards] = useState([]);
   const [LoadingCards, setLoadingCards] = useState(false)
   const [Search, setSearch] = useState('');
-  const [completeBookListState, setCompleteBookListState] = useState([]);
+  const [setCompleteBookListState] = useState([]);
 
   // Set datas if User or Kid
   const isLogUser = useSelector((state) => state.user.isLogUser);
@@ -155,7 +134,7 @@ function Search() {
   useEffect(() => {
     setCurrentPage(1);
     _DATA.jump(1);
-  }, [Cards]);
+  }, [Cards,_DATA]);
 
 // Appel des infos en session si une recherche antérieur a eut lieu
   useEffect(() => {

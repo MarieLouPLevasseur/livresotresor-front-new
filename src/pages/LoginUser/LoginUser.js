@@ -17,16 +17,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLastname, userLogin, userId, userFirstname, userEmail } from '../../Utils/Slices/login/userSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
-
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '../../Utils/Loading/Loading';
-import './LoginUser.scss';
+
 import Image from './../../assets/img/themes/main/userlogin2.jpg';
 import { useTogglePasswordVisibility } from '../../Utils/Passwords/useTogglePasswordVisibility';
 import OpenEye from '../../assets/img/themes/main/oeil_ouvert.png';
 import CloseEye from '../../assets/img/themes/main/oeil_ferme.png';
-import Spinner from '../../Utils/Loading/Spinner';
+
+import './LoginUser.scss';
 
 
 function Copyright(props) {

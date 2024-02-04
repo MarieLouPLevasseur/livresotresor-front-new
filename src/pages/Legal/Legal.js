@@ -1,8 +1,7 @@
 import React from 'react'
-import { Box, Rating, Typography, Avatar } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 import './Legal.scss';
-import { AddBox } from '@mui/icons-material';
 
 function Legal() {
   return (

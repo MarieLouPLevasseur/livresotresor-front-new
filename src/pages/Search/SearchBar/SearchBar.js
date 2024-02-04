@@ -2,7 +2,6 @@ import React from 'react'
 import { Box, TextField, Button } from '@mui/material'
 
 import './SearchBar.scss'
-import { AirlineSeatLegroomExtraOutlined, Padding } from '@mui/icons-material'
 
 function SearchBar({ search, setSearch, setItemToSearch }) {
   return (

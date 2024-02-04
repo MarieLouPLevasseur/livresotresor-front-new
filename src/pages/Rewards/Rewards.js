@@ -2,26 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Typography, Avatar } from '@mui/material'
+
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Tooltip from '@mui/material/Tooltip';
-
-
 import { kidAvatar } from '../../Utils/Slices/login/kidSlice';
 import { userKidAvatar  } from '../../Utils/Slices/login/userSlice';
-
 import HomeCarousel from '../Home/HomeCarousel/HomeCarousel'
 import HomeKidButtons from '../HomeKid/HomeKidButtons/HomeKidButtons'
 import HomeKidProgressBar from '../HomeKid/HomeKidProgressBar/HomeKidProgressBar'
-import DiplomaList from './RewardsList/DiplomaList'
 import Loading from '../../Utils/Loading/Loading';
+import BookIconeMenu from '../Book/BookIconeMenu/BookIconeMenu';
+import { handleErrors } from '../../Utils/Errors/handleErrors'
 
 import './Rewards.scss'
-import AvatarList from './RewardsList/AvatarList'
-import BookIconeMenu from '../Book/BookIconeMenu/BookIconeMenu';
-import BookMenu from '../Book/BookMenu/BookMenu';
-import { handleErrors } from '../../Utils/Errors/handleErrors'
 
 function Rewards() {
 
@@ -80,8 +74,8 @@ function Rewards() {
 const [currentAvatarToSetValue, setCurrentAvatarToSetValue] = useState("");
 
 // Error states
-const [alertErrorSubmit, setAlertErrorSubmit] = useState(false);
-const [alertErrorLogin, setAlertErrorLogin] = useState(false);
+// const [alertErrorSubmit, setAlertErrorSubmit] = useState(false);
+const [ setAlertErrorLogin] = useState(false);
 
 
 // ***********************
@@ -118,7 +112,7 @@ const [alertErrorLogin, setAlertErrorLogin] = useState(false);
       handleErrors(error)
     })
   }
-  }, [id]);
+  }, [id,apiEndpointAvatars,apiEndpointDiplomas,apiUrl,token]);
 
   // ***************Set Datas for set new avatar for the Kid**************************
 
@@ -193,7 +187,6 @@ const [alertErrorLogin, setAlertErrorLogin] = useState(false);
       </Typography>
       <Box sx={{display: 'flex'}}>
         <HomeKidButtons />
-        {/* <BookMenu /> */}
 
         <BookIconeMenu/>
         <Box sx={{display: 'flex', width: '70%', flexDirection: 'column', alignItems: 'center', mt: 2 , margin:{xs:'auto'}}}>
