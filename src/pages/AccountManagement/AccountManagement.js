@@ -6,33 +6,27 @@ import { Box, Typography, TextField, Card, Grid } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useDispatch, useSelector } from 'react-redux';
 import axios from 'axios'
-import Fab from '@mui/material/Fab'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Link } from 'react-router-dom';
 
 // COMPONENTS
 import Loading from '../../Utils/Loading/Loading';
-import Validate from './Validate/Validate';
-import { useTogglePasswordVisibility } from '../../Utils/Passwords/useTogglePasswordVisibility';
 import KidCard from './KidCard'; 
+import UserCard from './UserCard'; 
+import KidAddForm from './KidAddForm'; 
 
 // UTILS
 import { userLogout } from '../../Utils/Slices/login/userSlice';
 import { kidLogout } from '../../Utils/Slices/login/kidSlice';
-import PasswordStrengthMeter from '../../Utils/Passwords/PasswordStrengthMeter/PasswordStrengthMeter';
 import { handleErrors } from '../../Utils/Errors/handleErrors'
 import { userFirstname, userId, userKidAvatar, userKidId, userKidUsername,userKidFirstname, userLastname, userLogin , userEmail} from '../../Utils/Slices/login/userSlice';
 
 
 // IMG
-import OpenEye from '../../assets/img/themes/main/oeil_ouvert.png';
-import CloseEye from '../../assets/img/themes/main/oeil_ferme.png';
+
 import logoBook from '../../assets/img/themes/main/logo.3.png';
 
 // MODALS
@@ -99,12 +93,6 @@ function AccountManagement() {
   // Others
   const dispatch = useDispatch();
   const [changeDatas, setChangeDatas] = useState(false);
-  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
-  useTogglePasswordVisibility();
-  const [passwordToCheck, setPasswordToCheck] = useState('');
-  const handlePasswordChange = (e) => {
-    setPasswordToCheck(e.target.value);
-  };
 
   // Alert
 
@@ -170,7 +158,7 @@ function AccountManagement() {
 
   // ! nouveaux APPEL: 
 
-    // OK DONE WIP KID DELETE
+  // *************** Delete Kid**************************
 
     
       const handleOpendeleteKid = (id) => {
@@ -188,13 +176,15 @@ function AccountManagement() {
         handleClose();
       };
 
-    // OK DONE USER UPDATE
+   // *************** Check Credential User **************************
 
     const handleConfirmCheckCredential = (password) => {
 
       postApiCheckCredential(apiUrl + apiEndpointUsers+ '/checkCredential', { password }, token, setAlert, setAlertMessage, setAlertSeverity, handleSubmitUpdateUser);
   
     };
+
+      // *************** Update a User **************************
 
     const handleSubmitUpdateUser = () => {
     
@@ -251,6 +241,7 @@ function AccountManagement() {
   };
   // *************** Set Datas for Create a Kid**************************
 
+  // TODO: a mettre dans un component
   // Api Call
   const postApi = (routeApi, data) => {
     axios.post(routeApi, data, {
@@ -298,6 +289,7 @@ function AccountManagement() {
   };
 
   // *************** Set Datas for Update a Kid **************************
+  // TODO: a mettre dans un component
 
   // Api Call
   const patchApiUpdate = (routeApi, data) => {
@@ -344,13 +336,10 @@ function AccountManagement() {
     patchApiUpdate(apiUrl + apiEndpointKids + `/${id}`, profilUserJson);
 
   };
-  // *************** Delete Kid**************************
-    //  OK DONE
 
-   // *************** Check Credential User **************************
 
-  // OK DONE
    // *************** Delete User **************************
+  // TODO: a mettre dans un component
 
     // Api Call
    const deleteApiUser = (routeApi) => {
@@ -388,9 +377,6 @@ function AccountManagement() {
 
   };
 
-  // *************** Set Datas for Update a User **************************
-    // OK DONE
-
   // **************************************************************
   if (loadinKidsValue || loadinUserValue) {
     return <Loading />
@@ -414,87 +400,26 @@ function AccountManagement() {
 
                 <Typography sx={{ fontSize: '1.4rem', padding: '15px', fontFamily: 'montserrat', margin: 'auto', color: 'white', background: '#4462A5' }}>Informations du compte parent</Typography>
               </Card>
-              <Box  sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%' }}>
-                <Card variant='outlined' sx={{ border: '1px solid #4462A5', marginBottom: '30px', marginTop: '30px', marginLeft: '20px', width: '70%' }}>
-                  <Box sx={{ display: 'flex', flexDirection: {xs:'column', lg:"row"}, justifyContent: 'flex-start', Width: '100%', padding: '10px', gap: '10px' }}>
-                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, Width: '100%', justifyContent: 'space-around', gap: '10px' }}>
-
-                      <Grid item xs={12} sm={6} >
-                        <TextField
-                          fullWidth
-                          defaultValue={email}
-                          id="email"
-                          label="email"
-                          name="email"
-                          autoComplete="email"
-                          onChange={(e) => setUserUpdateEmailValue(e.target.value)}
-
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} >
-                        <TextField
-                          defaultValue={firstname}
-                          autoComplete="given-name"
-                          name="firstName"
-                          fullWidth
-                          label="Nom"
-                          autoFocus
-                          onChange={(e) => setUserUpdateFirstNameValue(e.target.value)}
-
-                        />
-                      </Grid>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-around', Width: '100%', marginBottom: '20px', gap: '10px' }}>
-
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          defaultValue={userUpdatePasswordValue}
-                          name="password"
-                          label="Mot de passe"
-                          // type="password"
-                          id="password"
-                          autoComplete="new-password"
-                          onChange={(e) => setUserUpdatePasswordValue(e.target.value)}
-
-                        />
-
-                      <PasswordStrengthMeter passwordValue={userUpdatePasswordValue}/>
-                      
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          defaultValue={lastName}
-                          label="pseudonyme"
-                          name="lastName"
-                          autoComplete="family-name"
-                          onChange={(e) => setUserUpdateLastNameValue(e.target.value)}
-
-                        />
-                      </Grid>
-                    </Box>
-                                      {/* <AccountM /> */}
-                    <Box sx={{ '& > :not(style)': { m: 1 } , display:'flex', flexDirection:'row', justifyContent:'center'}}>
-                      <Fab color="secondary" aria-label="edit">
-                            <CheckCircleIcon onClick={() => [setOpenModalCheckCredential(true), setChangeUpdateUser(true)]}>
-                              
-                            </CheckCircleIcon>
-                      </Fab>
-                      <Fab className="deleteIconBackground" sx={{backgroundColor:'#FB4747'}}>
-                        <DeleteIcon sx={{backgroundColor:'#FB4747'}} onClick={() => [setOpenModalCheckCredential(true), setChangeDeleteUser(true)]}/>
-                      </Fab>
-                    </Box>
-                  </Box>
-                </Card>
-              </Box>
+              <UserCard
+                email={userEmail}
+                firstname={firstname}
+                lastName={lastName}
+                userUpdatePasswordValue={userUpdatePasswordValue}
+                setUserUpdateEmailValue={setUserUpdateEmailValue}
+                setUserUpdateFirstNameValue={setUserUpdateFirstNameValue}
+                setUserUpdatePasswordValue={setUserUpdatePasswordValue}
+                setUserUpdateLastNameValue={setUserUpdateLastNameValue}
+                setOpenModalCheckCredential={setOpenModalCheckCredential}
+                setChangeUpdateUser={setChangeUpdateUser}
+                setChangeDeleteUser={setChangeDeleteUser}
+              />
 
               <Card variant='outlined' sx={{ border: '1px solid #4462A5', marginBottom: '30px', marginTop: '30px', marginLeft: '20px', width: '40%' }}>
                 <Typography sx={{ fontSize: '1.4rem', padding: '15px', fontFamily: 'montserrat', color: 'white', background: '#4462A5' }}>Informations des comptes enfants</Typography>
               </Card>
               <Typography sx={{ fontSize: '1rem', padding: '10px', fontFamily: 'montserrat', color: 'red' }}>En ajoutant un identifiant et un mot de passe au compte enfant, vous lui permettez d'accèder de manière autonome à son espace enfant. Il pourra consulter son espace personnel et ses récompenses.</Typography>
 
-             {/* KID CARD to edit***** */}
+             {/* KID CARD to edit ***** */}
               {KidsValue.map((kid) => (
                 <KidCard
                   key={kid.id}
@@ -510,74 +435,16 @@ function AccountManagement() {
                 <Typography sx={{ fontSize: '1.4rem', padding: '15px', fontFamily: 'montserrat', color: 'white', background: '#4462A5' }}>Créer un nouveau profil enfant</Typography>
               </Card>
               {/* KID CARD to add ***** */}
-              <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%' }}>
-                <Card variant='outlined' sx={{ border: '1px solid #4462A5', marginBottom: '30px', marginTop: '30px', marginLeft: '20px', width: '70%' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', Width: '100%', padding: '10px', gap: '10px' }}>
-
-
-
-
-                    <Box sx={{ display: 'flex', Width: '100%', justifyContent: 'space-around', borderBlockColor: 'red' }}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          autoComplete="given-name"
-                          name="firstName"
-                          required
-                          fullWidth
-                          label='Prénom'
-                          autoFocus
-                          value={kidAddFirstNameValue}
-                          onChange={(e) => setKidAddFirstNameValue(e.target.value)}
-                        />
-                      </Grid>
-                    </Box>
-                    <Box sx={{ color: 'blue' , textAlign:"justify"}}>
-                      Si vous souhaitez donner les accès pour que votre enfant puisse se connecter depuis l'accueil en autonomie, vous pouvez renseigner son identifiant et son mot de passe.
-                      Vous serez la seule personne pouvant modifier son identifiant ou son mot de passe. Vous pourrez modifier votre choix après la création de son compte.
-
-                    </Box>
-
-                    <Box sx={{ display: 'flex', Width: '100%', justifyContent: 'space-around' }}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          autoComplete="kid-username"
-                          name="kid-username"
-                          fullWidth
-                          label="Identifiant de connexion"
-                          autoFocus
-                          value={kidAddUsernameValue}
-                          onChange={(e) => setKidAddUsernameValue(e.target.value)}
-
-                        />
-                      </Grid>
-                    </Box>
-
-                    <Box sx={{ display: 'flex', justifyContent: 'space-around', Width: '100%', marginBottom: '20px' }}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          name="password"
-                          label="Mot de passe"
-                          // type="password"
-                          type={passwordVisibility ? "password" : ""}
-                          autoComplete="new-password"
-                          value={kidAddPasswordValue}
-                          onChange={(e) => setKidAddPasswordValue(e.target.value)}
-                        />
-                   <PasswordStrengthMeter passwordValue={kidAddPasswordValue}/>
-                   <img edge="end" alt={rightIcon === "eye"? "Set password visible":"set password invisible"} src={rightIcon === "eye" ? OpenEye : CloseEye} size={22} onClick={handlePasswordVisibility} />
-
-                      </Grid>
-                    </Box>
-                    <p>
-                      (*) Les champs marqués d'un astérix sont obligatoires.
-
-                    </p>
-                  </Box>
-                  <Validate handleSubmit={handleSubmitCreate} />
-                </Card>
-
-              </Box>
+              <KidAddForm
+                kidAddFirstNameValue={kidAddFirstNameValue}
+                setKidAddFirstNameValue={setKidAddFirstNameValue}
+                kidAddUsernameValue={kidAddUsernameValue}
+                setKidAddUsernameValue={setKidAddUsernameValue}
+                kidAddPasswordValue={kidAddPasswordValue}
+                setKidAddPasswordValue={setKidAddPasswordValue}
+                handleSubmitCreate={handleSubmitCreate}
+              />
+            
 
             </Box>
           

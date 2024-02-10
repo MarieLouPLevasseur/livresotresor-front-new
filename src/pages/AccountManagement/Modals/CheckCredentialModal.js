@@ -11,9 +11,15 @@ const CheckCredentialModal = ({
   const [password, setPassword] = useState("");
 
   const handleConfirmClick = () => {
-    console.log(password)
     handleConfirmCheckCredential(password); 
 
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Empêche le comportement par défaut de la touche "Entrée"
+      handleConfirmClick(); 
+    }
   };
 
   return (
@@ -29,6 +35,8 @@ const CheckCredentialModal = ({
             value={password}
             placeholder="Confirmation mot de passe"
             onChange={(e) => setPassword(e.target.value)} 
+            onKeyDown={handleKeyDown} // Écouter l'événement keydown pour la touche "Entrée"
+
           />
           <Button fullWidth variant="contained" onClick={handleConfirmClick} sx={{ mt: 2, mb: 2, background: '#4462A5' }}>
             Confirmation mot de passe
