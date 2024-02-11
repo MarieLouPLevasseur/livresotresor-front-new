@@ -6,15 +6,17 @@ import { Box, Typography, Card } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useDispatch, useSelector } from 'react-redux';
 import axios from 'axios'
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
 
 // COMPONENTS
 import Loading from '../../Utils/Loading/Loading';
 import KidCard from './KidCard'; 
 import UserCard from './UserCard'; 
 import KidAddForm from './KidAddForm'; 
+
+// MODALS
+import CheckCredentialModal from './Modals/CheckCredentialModal';
+import DeleteAccountModal from './Modals/DeleteAccountModal';
+import GoodbyeModal from './Modals/GoodbyeModal';
 
 // UTILS
 import { userLogout } from '../../Utils/Slices/login/userSlice';
@@ -23,12 +25,7 @@ import { handleErrors } from '../../Utils/Errors/handleErrors';
 import { userFirstname, userLastname, userEmail} from '../../Utils/Slices/login/userSlice';
 
 
-// IMG
-import logoBook from '../../assets/img/themes/main/logo.3.png';
 
-// MODALS
-import CheckCredentialModal from './Modals/CheckCredentialModal';
-import DeleteAccountModal from './Modals/DeleteAccountModal';
 
 // APIS
 import { deleteApiKid, deleteApiUser } from '../../ApiCalls/DeleteAccount';
@@ -60,7 +57,7 @@ function AccountManagement() {
   // Modal
   const [openModalCheckCredential, setOpenModalCheckCredential] = useState(false);
   const [openModalConfirmDeleteAccount, setOpenModalConfirmDeleteAccount] = useState(false);
-  const [openModalDeleteAccountMessage, setOpenModalDeleteAccountMessage] = useState(false);
+  const [openModalGoodbye, setOpenModalGoodbye] = useState(false);
   const [context, setContext] = useState("");
 
 
@@ -102,7 +99,6 @@ function AccountManagement() {
   const apiEndpointDeleteUser = `/api/v1/users/delete/${id}`
 
   
-  // TODO : factoriser les Alert et les modals
   // TODO : ? ajouter une variable 'checked' lorsque la confirmation du mot de passe a été faites une fois. Cela évitera à l'utilisateur de rentrer sont code 50 fois apres confirmations
   // TODO : ? valider un temps avant la remise à 0 du checked?
   // TODO : ? Envoyer une confirmation lors du changement de mot de passe par mail?  
@@ -185,7 +181,7 @@ function AccountManagement() {
               console.log(successDeleteUser);
               if (successDeleteUser) {
 
-                  setOpenModalDeleteAccountMessage(true);
+                  setOpenModalGoodbye(true)
 
                   // logout user
                   dispatch(userLogout());
@@ -258,7 +254,7 @@ function AccountManagement() {
       setOpenModalCheckCredential(false);
       setIdKidToDelete(0);
       setOpenModalConfirmDeleteAccount(false);
-      setOpenModalDeleteAccountMessage(false);
+      setOpenModalGoodbye(false)
 
     };
 
@@ -399,8 +395,7 @@ function AccountManagement() {
             </Box>
         
             {/* ******* MODAL ********** */}
-                  {/*  User*/}
-                  {/* CheckCredential */}                
+                      
                   <CheckCredentialModal 
                     open={openModalCheckCredential}
                     handleClose={handleClose}
@@ -414,73 +409,23 @@ function AccountManagement() {
                     setOpenModalConfirmDeleteAccount={setOpenModalConfirmDeleteAccount}
                  
                   />
-                        {/* Confirm Delete */}
 
-                    
-                      {/* Good Bye message when user delete account */}
-
-                      <Modal
-                          open={openModalDeleteAccountMessage}
-                          onClose={handleClose}
-                          aria-labelledby="parent-modal-title"
-                          aria-describedby="parent-modal-description"
-                          disableEnforceFocus
-                        >
-                          <Box sx={{
-                            width: '40%',
-                            padding:10,
-                            backgroundColor: 'white',
-                            margin: 'auto',
-                            alignContent: 'center',
-                            textAlign:'center'
-                          }}
-                          >
-
-                            <h2 id="parent-modal-title"> Merci d'avoir fait un bout de chemin avec nous!</h2>
-                            <p className="parent-modal-delete-account" >
-                            Nous avons été heureux de vous compter parmis nos membres.
-                            </p>
-                            <p className="parent-modal-delete-account" >
-                            Nous vous souhaitons une belle journée. 
-                            </p>
-                            <p className="parent-modal-delete-account" >
-
-                            Bonne continuation. 
-                             </p>
-
-                            <img className="logoModal" src={logoBook} alt="logo Book" width={'30%'} >
- 
-                            
-                            </img>
-                          <Link to={'/'} style={{"textDecoration":"none"}}>
-                          
-                              <Button
-                                className="closeButton"
-                                fullWidth
-                                variant="contained"
-                                onClick={handleClose} 
-                                sx={{ mt: 2, mb: 2, background: 'blue' }}
-                              >
-                              Retour à l'Accueil
-                              </Button>
-                          </Link>
-                              
-                            </Box>
-                        </Modal> 
+                  <GoodbyeModal
+                    open={openModalGoodbye}
+                    handleClose={handleClose}
+                  />
+                      
 
                         {/*----- Kid and User Delete------- */}
                       
-                        <DeleteAccountModal
-                          open={openModalConfirmDeleteAccount}
-                          handleClose={handleClose}
-                          handleConfirmDelete={handleConfirmDelete}
-                        />
+                  <DeleteAccountModal
+                    open={openModalConfirmDeleteAccount}
+                    handleClose={handleClose}
+                    handleConfirmDelete={handleConfirmDelete}
+                  />
 
           </Box>
-
         </Box>
-
-        
       </div>
     </ThemeProvider>
   )
