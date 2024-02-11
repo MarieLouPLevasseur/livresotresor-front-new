@@ -16,7 +16,8 @@ const UserCard = ({
   setUserUpdateLastNameValue,
   setOpenModalCheckCredential,
   setChangeUpdateUser,
-  setChangeDeleteUser
+  setChangeDeleteUser,
+  setContext
 }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%' }}>
@@ -72,11 +73,11 @@ const UserCard = ({
             </Grid>
           </Box>
           <Box sx={{ '& > :not(style)': { m: 1 }, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-            <Fab color="secondary" aria-label="edit" onClick={() => [setOpenModalCheckCredential(true), setChangeUpdateUser(true)]}>
+            <Fab color="secondary" aria-label="edit" onClick={() => [setOpenModalCheckCredential(true), setChangeUpdateUser(true),setContext("updateUser")]}>
               <CheckCircleIcon />
             </Fab>
             <Fab className="deleteIconBackground" sx={{ backgroundColor: '#FB4747' }}>
-              <DeleteIcon sx={{ backgroundColor: '#FB4747' }} onClick={() => [setOpenModalCheckCredential(true), setChangeDeleteUser(true)]} />
+              <DeleteIcon sx={{ backgroundColor: '#FB4747' }} onClick={() => [setOpenModalCheckCredential(true), setChangeDeleteUser(true),setContext("deleteUser")]} />
             </Fab>
           </Box>
         </Box>

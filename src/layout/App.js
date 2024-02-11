@@ -58,6 +58,8 @@ import { kidAvatar, kidId, kidLogin, kidUsername, kidProgress, kidFirstname } fr
 import SessionTimeout from '../Utils/SessionTimeout';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { SnackbarProvider } from'../Contexts/SnackBarContext';
+
 import './App.scss';
 
 function App() {
@@ -107,6 +109,7 @@ function App() {
 
   return (
     <div className="App">
+    <SnackbarProvider>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -134,6 +137,7 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
         <Route path="/error-server" element={<ErrorServer />} />
       </Routes>
+      </SnackbarProvider>
       
       <SessionTimeout />
       <Footer />

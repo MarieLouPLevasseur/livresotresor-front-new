@@ -1,24 +1,24 @@
 import axios from 'axios';
 
-const deleteApiKid = (routeApi,token,setAlert,setAlertMessage,setAlertSeverity,setChangeDatas) => {
+const deleteApiKid = (routeApi,token,setChangeDatas) => {
   axios.delete(routeApi, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
   })
     .then(function (response) {
-      setAlert(true);
-      setAlertMessage("Le compte a bien été détruit")
-      setAlertSeverity("success")
+      // TODO: gérer le renvoi true ou false pour le snackbar
+      // setAlert(true);
+      // setAlertMessage("Le compte a bien été détruit")
+      // setAlertSeverity("success")
       setChangeDatas(true)
+
+      return true;
     })
     .catch(function (error) {
       console.log(error);
       
-        setAlert(true);
-        setAlertMessage("Une erreur s'est produite lors de la suppression")
-        setAlertSeverity("error")
-
+      return false;
     });
 };
 

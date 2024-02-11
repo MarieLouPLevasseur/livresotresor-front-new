@@ -21,7 +21,7 @@ import KidAddForm from './KidAddForm';
 // UTILS
 import { userLogout } from '../../Utils/Slices/login/userSlice';
 import { kidLogout } from '../../Utils/Slices/login/kidSlice';
-import { handleErrors } from '../../Utils/Errors/handleErrors'
+import { handleErrors } from '../../Utils/Errors/handleErrors';
 import { userFirstname, userId, userKidAvatar, userKidId, userKidUsername,userKidFirstname, userLastname, userLogin , userEmail} from '../../Utils/Slices/login/userSlice';
 
 
@@ -35,8 +35,11 @@ import DeleteAccountModal from './Modals/DeleteAccountModal';
 
 // APIS
 import { deleteApiKid, deleteApiUser } from '../../ApiCalls/DeleteAccount';
-import postApiCheckCredential from '../../ApiCalls/CheckCredential';
 import patchApiUpdateUser from '../../ApiCalls/UpdateUser';
+
+// Context
+
+import { useSnackbar } from '../../Contexts/SnackBarContext';
 
 
 import './AccountManagement.scss';
@@ -62,6 +65,7 @@ function AccountManagement() {
   const [openModalConfirmDeleteUser, setOpenModalConfirmDeleteUser] = useState(false);
   const [openModalDeleteAccountMessage, setOpenModalDeleteAccountMessage] = useState(false);
   const [openModalDeleteKid, setOpenModalDeleteKid] = useState(false);
+  const [context, setContext] = useState("");
 
 
   // Kid
@@ -96,9 +100,8 @@ function AccountManagement() {
 
   // Alert
 
-  const [alert, setAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertSeverity, setAlertSeverity] = useState("info");
+  const showSnackbar = useSnackbar(); 
+
   
   // Api Calls
   const apiUrl = useSelector((state) => state.api.apiUrl);
@@ -146,9 +149,7 @@ function AccountManagement() {
           })
           .catch((error) => {
             console.log(error);
-             setAlert(true);
-             setAlertMessage("Une erreur s'est produite.")
-             setAlertSeverity("error")
+            showSnackbar("Une erreur s'est produite", "error"); 
           })
 
 
@@ -172,17 +173,18 @@ function AccountManagement() {
       };
     
       const handleSubmitDelete = () => {
-        deleteApiKid(apiUrl + apiEndpointKids + `/${idKidToDelete}`,token,setAlert,setAlertMessage,setAlertSeverity,setChangeDatas);
+        const successDeleteKid = deleteApiKid(apiUrl + apiEndpointKids + `/${idKidToDelete}`,token,setChangeDatas);
+
+        if(successDeleteKid){
+          showSnackbar("La suppression du compte enfant a été effectué", "error"); 
+
+        }else{
+          showSnackbar("Une erreur s'est produite lors de la mise supression du compte enfant", "error"); 
+
+        }
         handleClose();
       };
 
-   // *************** Check Credential User **************************
-
-    const handleConfirmCheckCredential = (password) => {
-
-      postApiCheckCredential(apiUrl + apiEndpointUsers+ '/checkCredential', { password }, token, setAlert, setAlertMessage, setAlertSeverity, handleSubmitUpdateUser);
-  
-    };
 
       // *************** Update a User **************************
 
@@ -197,8 +199,18 @@ function AccountManagement() {
       };
     
       const updateUserJson = JSON.stringify(updateUser);
-    
-      patchApiUpdateUser(apiUrl + apiEndpointUsers, updateUserJson, token, setAlert, setAlertMessage, setAlertSeverity, handleClose, dispatchDataOnStore);
+      const successPatch = patchApiUpdateUser(apiUrl + apiEndpointUsers, updateUserJson, token, handleClose, dispatchDataOnStore);
+
+        if (successPatch) {
+          showSnackbar("Mise à jour utilisateur effectué avec succès", "success"); 
+
+          dispatchDataOnStore();
+
+          setChangeDatas(true); // Déclenchez un rafraîchissement des données
+      } else {
+          showSnackbar("Une erreur s'est produite lors de la mise à jour des informations", "error"); 
+
+      }
     };
     
   
@@ -250,9 +262,7 @@ function AccountManagement() {
       },
     })
       .then(function (response) {
-         setAlert(true);
-         setAlertMessage("Le compte enfant a bien été créé")
-         setAlertSeverity("success")
+        showSnackbar("Le compte enfant a bien été crée", "success"); 
 
         setChangeDatas(true);
         setKidAddFirstNameValue("");
@@ -263,14 +273,10 @@ function AccountManagement() {
         console.log(error);
         console.log(error.message)
         if (error.message === "Request failed with status code 400"){
-           setAlert(true);
-           setAlertMessage("Vous ne pouvez pas utiliser cet identifiant")
-           setAlertSeverity("error")
+          showSnackbar("Vous ne pouvez pas utiliser cet identifiant", "error"); 
         }
         else{
-           setAlert(true);
-           setAlertMessage("Une erreur s'est produite lors de la création")
-           setAlertSeverity("error")
+          showSnackbar("Une erreur s'est produite lors de la création", "error"); 
         }
 
       });
@@ -299,9 +305,7 @@ function AccountManagement() {
       },
     })
       .then(function (response) {
-        setAlert(true);
-        setAlertMessage("La mise à jour a bien été prise en compte")
-        setAlertSeverity("success")
+        showSnackbar("La mise à jour a bien été prise en compte", "success"); 
 
         setChangeDatas(true)
         setKidUpdateFirstNameValue("");
@@ -312,15 +316,10 @@ function AccountManagement() {
         console.log(error);
         
         if (error.message === "Request failed with status code 409"){
-          setAlert(true);
-          setAlertMessage("Vous ne pouvez pas utiliser cet identifiant")
-          setAlertSeverity("error")
+          showSnackbar("Vous ne pouvez pas utiliser cet identifiant", "error"); 
         }
         else{
-          setAlert(true);
-          setAlertMessage("Une erreur s'est produit lors de la mise à jour")
-          setAlertSeverity("error")
-
+          showSnackbar("Une erreur s'est produite lors de la mise à jour ", "error"); 
         }
       });
   }
@@ -360,17 +359,12 @@ function AccountManagement() {
       })
       .catch(function (error) {
         console.log(error);
-        
-          setAlert(true);
-          setAlertMessage("Une erreur s'est produite lors de la suppression")
-          setAlertSeverity("error")
+        showSnackbar("Une erreur s'est produite lors de la suppression", "error"); 
 
       });
   }
 
   const handleSubmitDeleteUser = () => {
-    console.log("-----------je suis dans le handleSubmit Delete--------")
-    console.log(id, "test de 'e'")
   
     deleteApiUser(apiUrl + apiEndpointDeleteUser );
     handleClose();
@@ -412,12 +406,13 @@ function AccountManagement() {
                 setOpenModalCheckCredential={setOpenModalCheckCredential}
                 setChangeUpdateUser={setChangeUpdateUser}
                 setChangeDeleteUser={setChangeDeleteUser}
+                setContext={setContext}
               />
 
               <Card variant='outlined' sx={{ border: '1px solid #4462A5', marginBottom: '30px', marginTop: '30px', marginLeft: '20px', width: '40%' }}>
                 <Typography sx={{ fontSize: '1.4rem', padding: '15px', fontFamily: 'montserrat', color: 'white', background: '#4462A5' }}>Informations des comptes enfants</Typography>
               </Card>
-              <Typography sx={{ fontSize: '1rem', padding: '10px', fontFamily: 'montserrat', color: 'red' }}>En ajoutant un identifiant et un mot de passe au compte enfant, vous lui permettez d'accèder de manière autonome à son espace enfant. Il pourra consulter son espace personnel et ses récompenses.</Typography>
+              <Typography sx={{ fontSize: '1rem', padding: '10px', fontFamily: 'montserrat', color: 'red' }}>En ajoutant un identifiant et un mot de passe au compte enfant, vous lui permettez d'accèder de manière autonome à son espace enfant. En lui transmettant ses accès, il pourra consulter son espace personnel et ses récompenses.</Typography>
 
              {/* KID CARD to edit ***** */}
               {KidsValue.map((kid) => (
@@ -447,40 +442,22 @@ function AccountManagement() {
             
 
             </Box>
-          
-
-            {/* ** ALERT Message *** */}
-              <Snackbar
-                open={alert}
-                autoHideDuration={6000}
-                onClose={() => setAlert(false)}
-              >
-                <MuiAlert
-                  elevation={6}
-                  variant="filled"
-                  severity={alertSeverity}
-                  sx={{
-                    width: "100%",
-                    display: 'block',
-                    textAlign: "center",
-                    marginBottom: '60%'
-                  }}
-                >
-                  {alertMessage}
-                </MuiAlert>
-              </Snackbar>
         
             {/* ******* MODAL ********** */}
                   {/*  User*/}
-                  {/* CheckCredential */}
-
-                  <CheckCredentialModal
+                  {/* CheckCredential */}                
+                  <CheckCredentialModal 
                     open={openModalCheckCredential}
                     handleClose={handleClose}
                     title={changeDeleteUser ? "Suppression du compte?" : "Modification du compte?"}
-                    handleConfirmCheckCredential ={handleConfirmCheckCredential}
+                    apiUrl ={apiUrl}
+                    apiEndpointUsers = {apiEndpointUsers}
+                    token = {token}
+                    context={context}
+                    handleSubmitUpdateUser={handleSubmitUpdateUser}
+                    setOpenModalConfirmDeleteUser={setOpenModalConfirmDeleteUser}
+                    setOpenModalDeleteKid={setOpenModalDeleteKid}
                   />
-                
                         {/* Confirm Delete */}
 
                           <Modal
