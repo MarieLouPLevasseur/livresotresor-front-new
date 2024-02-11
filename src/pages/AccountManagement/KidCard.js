@@ -3,17 +3,31 @@ import { Box, Card, Typography, Grid, TextField, Fab } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const KidCard = ({ kid, handleOpendeleteKid }) => {
+const KidCard = ({ kid, setOpenModalConfirmDeleteAccount,setContext,handleSubmitUpdateKid }) => {     
+
         const [kidUpdateUsernameValue, setKidUpdateUsernameValue] = useState(kid.username);
         const [kidUpdatePasswordValue, setKidUpdatePasswordValue] = useState("");
         const [kidUpdateFirstNameValue, setKidUpdateFirstNameValue] = useState(kid.firstname);
+
+          // Valeurs initiales
+        const [initialFirstNameValue] = useState(kid.firstname);
+
+        // CONFIRM
+        const handleConfirmUpdate = () => {
+          handleSubmitUpdateKid(kid.id, {
+              username: kidUpdateUsernameValue,
+              password: kidUpdatePasswordValue,
+              firstname: kidUpdateFirstNameValue
+          });
+      };
+
             
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%' }}>
       <Card variant='outlined' sx={{ border: '1px solid #4462A5', marginBottom: '30px', marginTop: '30px', marginLeft: '20px', width: '70%' }}>
         <Box sx={{ display: 'flex', flexDirection: {xs:'column', lg:"row"}, justifyContent: 'flex-start', Width: '100%', padding: '10px', gap: '10px' }}>
           <Box>
-            <Typography sx={{ fontSize: '1.4rem', padding: '30px', fontFamily: 'montserrat', textTransform: 'uppercase' }}>{kidUpdateFirstNameValue}</Typography>
+            <Typography sx={{ fontSize: '1.4rem', padding: '30px', fontFamily: 'montserrat', textTransform: 'uppercase' }}>{initialFirstNameValue}</Typography>
           </Box>
           <Box sx={{ display: 'flex', Width: '100%', justifyContent: 'space-around', mt: '18px' }}>
             <Grid item xs={12} sm={6}>
@@ -54,11 +68,11 @@ const KidCard = ({ kid, handleOpendeleteKid }) => {
             </Grid>
           </Box>
           <Box sx={{ '& > :not(style)': { m: 1 } , display:'flex', flexDirection:'row', justifyContent:'center'}}>
-            <Fab color="secondary" aria-label="edit" >
-              <CheckCircleIcon />
+            <Fab  title="Mettre à jour l'enfant" color="secondary" aria-label="edit" onClick={() => handleConfirmUpdate()}>
+                <CheckCircleIcon />
             </Fab>
-            <Fab sx={{backgroundColor:'#FB4747'}}>
-            <DeleteIcon sx={{backgroundColor:'#FB4747'}} onClick={() => handleOpendeleteKid(kid.id)} />
+            <Fab  title="Supprimer l'enfant" sx={{backgroundColor:'#FB4747'}}>
+              <DeleteIcon sx={{backgroundColor:'#FB4747'}} onClick={() => [setOpenModalConfirmDeleteAccount(true), setContext("deleteKid")]} />
             </Fab>
           </Box>
         </Box>

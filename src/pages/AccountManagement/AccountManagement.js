@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import Avatar from '@mui/material/Avatar';
-import { Box, Typography, TextField, Card, Grid } from '@mui/material';
+import { Box, Typography, Card } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useDispatch, useSelector } from 'react-redux';
 import axios from 'axios'
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
@@ -22,11 +20,10 @@ import KidAddForm from './KidAddForm';
 import { userLogout } from '../../Utils/Slices/login/userSlice';
 import { kidLogout } from '../../Utils/Slices/login/kidSlice';
 import { handleErrors } from '../../Utils/Errors/handleErrors';
-import { userFirstname, userId, userKidAvatar, userKidId, userKidUsername,userKidFirstname, userLastname, userLogin , userEmail} from '../../Utils/Slices/login/userSlice';
+import { userFirstname, userLastname, userEmail} from '../../Utils/Slices/login/userSlice';
 
 
 // IMG
-
 import logoBook from '../../assets/img/themes/main/logo.3.png';
 
 // MODALS
@@ -35,13 +32,13 @@ import DeleteAccountModal from './Modals/DeleteAccountModal';
 
 // APIS
 import { deleteApiKid, deleteApiUser } from '../../ApiCalls/DeleteAccount';
-import patchApiUpdateUser from '../../ApiCalls/UpdateUser';
+import {patchApiUpdateUser} from '../../ApiCalls/UpdateUser';
+import {patchApiUpdatekid} from '../../ApiCalls/UpdateUser';
 
 // Context
-
 import { useSnackbar } from '../../Contexts/SnackBarContext';
 
-
+// CSS
 import './AccountManagement.scss';
 
 const theme = createTheme({
@@ -62,9 +59,8 @@ function AccountManagement() {
 
   // Modal
   const [openModalCheckCredential, setOpenModalCheckCredential] = useState(false);
-  const [openModalConfirmDeleteUser, setOpenModalConfirmDeleteUser] = useState(false);
+  const [openModalConfirmDeleteAccount, setOpenModalConfirmDeleteAccount] = useState(false);
   const [openModalDeleteAccountMessage, setOpenModalDeleteAccountMessage] = useState(false);
-  const [openModalDeleteKid, setOpenModalDeleteKid] = useState(false);
   const [context, setContext] = useState("");
 
 
@@ -74,9 +70,6 @@ function AccountManagement() {
   const [kidAddUsernameValue, setKidAddUsernameValue] = useState("");
   const [kidAddPasswordValue, setKidAddPasswordValue] = useState("");
   const [kidAddFirstNameValue, setKidAddFirstNameValue] = useState("");
-  const [kidUpdateUsernameValue, setKidUpdateUsernameValue] = useState("");
-  const [kidUpdatePasswordValue, setKidUpdatePasswordValue] = useState("");
-  const [kidUpdateFirstNameValue, setKidUpdateFirstNameValue] = useState("");
   const [idKidToDelete, setIdKidToDelete] = useState(0);
 
   // User
@@ -90,7 +83,6 @@ function AccountManagement() {
   const [userUpdatePasswordValue, setUserUpdatePasswordValue] = useState("");
   const [userUpdateLastNameValue, setUserUpdateLastNameValue] = useState("");
   const [userUpdateFirstNameValue, setUserUpdateFirstNameValue] = useState("");
-  const [changeUpdateUser, setChangeUpdateUser] = useState(false);
   const [changeDeleteUser, setChangeDeleteUser] = useState(false);
 
 
@@ -113,10 +105,9 @@ function AccountManagement() {
   // TODO : factoriser les Alert et les modals
   // TODO : ? ajouter une variable 'checked' lorsque la confirmation du mot de passe a été faites une fois. Cela évitera à l'utilisateur de rentrer sont code 50 fois apres confirmations
   // TODO : ? valider un temps avant la remise à 0 du checked?
-  // TODO : mettre un hover au survol des boutons edit, validate et delete
   // TODO : ? Envoyer une confirmation lors du changement de mot de passe par mail?  
   // TODO : ?vérifier les contraintes du mot de passe avant soumission?
-
+  // TODO : lors de la mise à jour enfant, le state dans le kidCard ne se met pas à jour (l'état n'es tpas surveiller correctement après modification)
 
   //  GET List of users
   useEffect(() => {
@@ -159,34 +150,62 @@ function AccountManagement() {
 
   // ! nouveaux APPEL: 
 
-  // *************** Delete Kid**************************
+  // *************** DELETE Kid and User **************************
 
+      const handleConfirmDelete = () => {
+        handleClose();
+        deleteAccount();
+      };
     
-      const handleOpendeleteKid = (id) => {
-        setOpenModalDeleteKid(true);
-        setIdKidToDelete(id);
+      const deleteAccount = () => {
+        // KID
+        if (context === 'deleteKid') {
+          deleteApiKid(apiUrl + apiEndpointKids + `/${idKidToDelete}`, token)
+            .then(successDeleteKid => {
+              if (successDeleteKid) {
+                showSnackbar("La suppression du compte enfant a été effectuée", "success");
+                setChangeDatas(true);
+              } else {
+                showSnackbar("Une erreur s'est produite lors de la suppression du compte enfant", "error");
+              }
+              handleClose();
+            })
+            .catch(error => {
+              console.log(error);
+              showSnackbar("Une erreur s'est produite lors de la suppression du compte enfant", "error");
+              handleClose();
+            });
+        }
+      
+        // USER
+        if (context === 'deleteUser') {
+      
+          deleteApiUser(apiUrl + apiEndpointDeleteUser, token)
+            .then(successDeleteUser => {
+              console.log(successDeleteUser);
+              if (successDeleteUser) {
+
+                  setOpenModalDeleteAccountMessage(true);
+
+                  // logout user
+                  dispatch(userLogout());
+                  dispatch(kidLogout());
+                  localStorage.removeItem('user');
+                  localStorage.removeItem('kid');
+              } else {
+                showSnackbar("Une erreur s'est produite lors de la suppression du compte", "error");
+              }
+            })
+            .catch(error => {
+              console.log(error);
+              showSnackbar("Une erreur s'est produite lors de la suppression", "error");
+            });
+        }
       };
       
-      const handleConfirmDelete = (id) => {
-        handleClose();
-        handleSubmitDelete()
-      };
-    
-      const handleSubmitDelete = () => {
-        const successDeleteKid = deleteApiKid(apiUrl + apiEndpointKids + `/${idKidToDelete}`,token,setChangeDatas);
-
-        if(successDeleteKid){
-          showSnackbar("La suppression du compte enfant a été effectué", "error"); 
-
-        }else{
-          showSnackbar("Une erreur s'est produite lors de la mise supression du compte enfant", "error"); 
-
-        }
-        handleClose();
-      };
 
 
-      // *************** Update a User **************************
+  // *************** Update a User **************************
 
     const handleSubmitUpdateUser = () => {
     
@@ -199,12 +218,12 @@ function AccountManagement() {
       };
     
       const updateUserJson = JSON.stringify(updateUser);
-      const successPatch = patchApiUpdateUser(apiUrl + apiEndpointUsers, updateUserJson, token, handleClose, dispatchDataOnStore);
+      const successPatchUser = patchApiUpdateUser(apiUrl + apiEndpointUsers, updateUserJson, token);
 
-        if (successPatch) {
+        if (successPatchUser) {
           showSnackbar("Mise à jour utilisateur effectué avec succès", "success"); 
 
-          dispatchDataOnStore();
+          dispatchUserDataOnStore();
 
           setChangeDatas(true); // Déclenchez un rafraîchissement des données
       } else {
@@ -214,7 +233,7 @@ function AccountManagement() {
     };
     
   
-    const dispatchDataOnStore =()=>{
+    const dispatchUserDataOnStore =()=>{
 
       //dispatch Data on Store
 
@@ -233,54 +252,47 @@ function AccountManagement() {
 
     };
 
-  // !------------------
+  //****** MODAL ***********
 
-   //****** MODAL ***********
+    const handleClose = () => {
+      setOpenModalCheckCredential(false);
+      setIdKidToDelete(0);
+      setOpenModalConfirmDeleteAccount(false);
+      setOpenModalDeleteAccountMessage(false);
 
-   const handleOpendeleteUser = () => {
-    setOpenModalCheckCredential(true);
-  };
+    };
 
-
-  const handleClose = () => {
-    setOpenModalCheckCredential(false);
-    setOpenModalDeleteKid(false);
-    setOpenModalConfirmDeleteUser(false);
-    setChangeDeleteUser(false);
-    setChangeUpdateUser(false);
-    setIdKidToDelete(0);
-
-  };
   // *************** Set Datas for Create a Kid**************************
 
-  // TODO: a mettre dans un component
-  // Api Call
-  const postApi = (routeApi, data) => {
-    axios.post(routeApi, data, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    })
-      .then(function (response) {
-        showSnackbar("Le compte enfant a bien été crée", "success"); 
-
-        setChangeDatas(true);
-        setKidAddFirstNameValue("");
-        setKidAddPasswordValue("");
-        setKidAddUsernameValue("");
+    // TODO: a mettre dans un component
+    // Api Call
+    const postApi = (routeApi, data) => {
+      axios.post(routeApi, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
       })
-      .catch(function (error) {
-        console.log(error);
-        console.log(error.message)
-        if (error.message === "Request failed with status code 400"){
-          showSnackbar("Vous ne pouvez pas utiliser cet identifiant", "error"); 
-        }
-        else{
-          showSnackbar("Une erreur s'est produite lors de la création", "error"); 
-        }
+        .then(function (response) {
+          showSnackbar("Le compte enfant a bien été crée", "success"); 
+          setChangeDatas(true);
 
-      });
-  }
+          // Reset
+          setKidAddFirstNameValue("");
+          setKidAddPasswordValue("");
+          setKidAddUsernameValue("");
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log(error.message)
+          if (error.message === "Request failed with status code 400"){
+            showSnackbar("Vous ne pouvez pas utiliser cet identifiant", "error"); 
+          }
+          else{
+            showSnackbar("Une erreur s'est produite lors de la création", "error"); 
+          }
+
+        });
+    }
 
   const handleSubmitCreate = () => {
 
@@ -295,80 +307,23 @@ function AccountManagement() {
   };
 
   // *************** Set Datas for Update a Kid **************************
-  // TODO: a mettre dans un component
 
-  // Api Call
-  const patchApiUpdate = (routeApi, data) => {
-    axios.patch(routeApi, data, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    })
-      .then(function (response) {
-        showSnackbar("La mise à jour a bien été prise en compte", "success"); 
+    const handleSubmitUpdateKid = (id,updatedKidInfo) => {
+      const profilKidJson = JSON.stringify(updatedKidInfo);
 
-        setChangeDatas(true)
-        setKidUpdateFirstNameValue("");
-        setKidUpdatePasswordValue("");
-        setKidUpdateUsernameValue("");
-      })
-      .catch(function (error) {
-        console.log(error);
-        
-        if (error.message === "Request failed with status code 409"){
-          showSnackbar("Vous ne pouvez pas utiliser cet identifiant", "error"); 
+      patchApiUpdatekid(apiUrl + apiEndpointKids + `/${id}`, profilKidJson, token)
+      .then((success) => {
+        if (success) {
+          showSnackbar("Mise à jour enfant effectuée avec succès", "success");
+          setChangeDatas(true); 
+        } else {
+          showSnackbar("Une erreur s'est produite lors de la mise à jour des informations enfant", "error");
         }
-        else{
-          showSnackbar("Une erreur s'est produite lors de la mise à jour ", "error"); 
-        }
-      });
-  }
-
-  const handleSubmitUpdate = (id) => {
-    console.log("-----------je suis dans le handleSubmit Update--------")
-    const profilUser = {
-      username: kidUpdateUsernameValue,
-      password: kidUpdatePasswordValue,
-      firstname: kidUpdateFirstNameValue
-    };
-    const profilUserJson = JSON.stringify(profilUser);
-    patchApiUpdate(apiUrl + apiEndpointKids + `/${id}`, profilUserJson);
-
-  };
-
-
-   // *************** Delete User **************************
-  // TODO: a mettre dans un component
-
-    // Api Call
-   const deleteApiUser = (routeApi) => {
-    axios.delete(routeApi, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    })
-      .then(function (response) {
-        console.log(response)
-        setOpenModalDeleteAccountMessage(true)
-
-        // logout user
-        dispatch(userLogout());
-        dispatch(kidLogout())
-        localStorage.removeItem('user');
-        localStorage.removeItem('kid');
       })
-      .catch(function (error) {
-        console.log(error);
-        showSnackbar("Une erreur s'est produite lors de la suppression", "error"); 
-
+      .catch((error) => {
+        console.error("Error while updating kid information:", error);
+        showSnackbar("Une erreur s'est produite lors de la mise à jour des informations enfant", "error");
       });
-  }
-
-  const handleSubmitDeleteUser = () => {
-  
-    deleteApiUser(apiUrl + apiEndpointDeleteUser );
-    handleClose();
-
   };
 
   // **************************************************************
@@ -395,7 +350,7 @@ function AccountManagement() {
                 <Typography sx={{ fontSize: '1.4rem', padding: '15px', fontFamily: 'montserrat', margin: 'auto', color: 'white', background: '#4462A5' }}>Informations du compte parent</Typography>
               </Card>
               <UserCard
-                email={userEmail}
+                email={email}
                 firstname={firstname}
                 lastName={lastName}
                 userUpdatePasswordValue={userUpdatePasswordValue}
@@ -404,7 +359,6 @@ function AccountManagement() {
                 setUserUpdatePasswordValue={setUserUpdatePasswordValue}
                 setUserUpdateLastNameValue={setUserUpdateLastNameValue}
                 setOpenModalCheckCredential={setOpenModalCheckCredential}
-                setChangeUpdateUser={setChangeUpdateUser}
                 setChangeDeleteUser={setChangeDeleteUser}
                 setContext={setContext}
               />
@@ -419,8 +373,9 @@ function AccountManagement() {
                 <KidCard
                   key={kid.id}
                   kid={kid}
-                  handleOpendeleteKid={handleOpendeleteKid} // Passer la fonction handleOpendeleteKid comme prop
-
+                  setOpenModalConfirmDeleteAccount={setOpenModalConfirmDeleteAccount} // Passer la fonction handleOpendeleteKid comme prop
+                  setContext={setContext}
+                  handleSubmitUpdateKid={handleSubmitUpdateKid}
                 />
               ))}
               {/* ***** */}
@@ -455,59 +410,13 @@ function AccountManagement() {
                     token = {token}
                     context={context}
                     handleSubmitUpdateUser={handleSubmitUpdateUser}
-                    setOpenModalConfirmDeleteUser={setOpenModalConfirmDeleteUser}
-                    setOpenModalDeleteKid={setOpenModalDeleteKid}
+                    handleSubmitDeleteAccount={handleSubmitUpdateUser}
+                    setOpenModalConfirmDeleteAccount={setOpenModalConfirmDeleteAccount}
+                 
                   />
                         {/* Confirm Delete */}
 
-                          <Modal
-                          open={openModalConfirmDeleteUser}
-                          onClose={handleClose}
-                          aria-labelledby="parent-modal-title"
-                          aria-describedby="parent-modal-description"
-                        >
-                          <Box sx={{
-                            width: 400,
-                            backgroundColor: 'white',
-                            margin: 'auto',
-                            alignContent: 'center'
-                          }}
-                          >
-
-                            <h2 id="parent-modal-title"> Suppression du compte?</h2>
-                            <p className="parent-modal-description">
-                              Mot de passe confirmé.
-                            </p>
-                            <p className="parent-modal-description">
-
-                            Etes-vous certain de vouloir supprimer ce compte? Cette action sera définitive et entrainera la suppression des comptes enfants associés.
-                            </p>
-                            <Box component="form" noValidate 
-                              sx={{
-                                margin: 10
-                              }}
-                            >
-                              <Button
-                                className="closeButton"
-                                fullWidth
-                                variant="contained"
-                                onClick={handleClose} 
-                                sx={{ mt: 2, mb: 2, background: 'red' }}
-                              >
-                                Non, c'est une erreur. Annuler.
-                              </Button>
-                              <Button
-                                className="deleteButton"
-                                fullWidth
-                                variant="contained"
-                                onClick={handleSubmitDeleteUser}
-                                sx={{ mt: 2, mb: 2, background: 'green' }}
-                              >
-                                Oui, je suis sûr. Supprimer.
-                              </Button>
-                            </Box>
-                          </Box>
-                        </Modal> 
+                    
                       {/* Good Bye message when user delete account */}
 
                       <Modal
@@ -559,15 +468,13 @@ function AccountManagement() {
                             </Box>
                         </Modal> 
 
-                        {/*----- Kid ------- */}
+                        {/*----- Kid and User Delete------- */}
+                      
                         <DeleteAccountModal
-                          open={openModalDeleteKid}
+                          open={openModalConfirmDeleteAccount}
                           handleClose={handleClose}
                           handleConfirmDelete={handleConfirmDelete}
-                          idKidToDelete={idKidToDelete}
-                          handleSubmitDelete={handleSubmitDelete}
                         />
-                       
 
           </Box>
 

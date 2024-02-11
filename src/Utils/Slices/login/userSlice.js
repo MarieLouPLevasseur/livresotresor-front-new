@@ -59,9 +59,12 @@ export const userSlice = createSlice({
       state.kidUsername= ""
       state.kidFirstname = ""
     },
+    userToken: (state, action) => {
+      state.token = action.payload
+    },
   }
 })
 
-export const { userLogin, userId, userFirstname, userLastname, userLogout , userKidId, userKidAvatar , userKidUsername, userKidFirstname, userEmail} = userSlice.actions
+export const { userToken, userLogin, userId, userFirstname, userLastname, userLogout , userKidId, userKidAvatar , userKidUsername, userKidFirstname, userEmail} = userSlice.actions
 
 export default userSlice.reducer

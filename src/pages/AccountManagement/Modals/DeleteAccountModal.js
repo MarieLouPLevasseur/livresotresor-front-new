@@ -1,57 +1,25 @@
 import React from 'react';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import ConfirmationModal from '../../../Utils/Modals/ConfirmationModal';
 
-const DeleteAccountModal = ({ open, handleClose, handleConfirmDelete, handleSubmitDelete }) => {
+const DeleteAccountModal = ({ open, handleClose, handleConfirmDelete }) => {
+
+  const handleConfirmDeleteAction = () => {
+    handleConfirmDelete();
+    handleClose();
+  };
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="parent-modal-title"
-      aria-describedby="parent-modal-description"
-    >
-      <Box
-        sx={{
-          width: 400,
-          backgroundColor: 'white',
-          margin: 'auto',
-          alignContent: 'center'
-        }}
-      >
-        <h2 id="parent-modal-title">Suppression du compte?</h2>
-        <p className="parent-modal-description">
-          Êtes-vous sûr de vouloir supprimer ce compte ? Cette action sera définitive et irréversible.
-        </p>
-        <Box
-          component="form"
-          noValidate
-          sx={{
-            margin: 10
-          }}
-        >
-          <Button
-            className="closeButton"
-            fullWidth
-            variant="contained"
-            onClick={handleClose}
-            sx={{ mt: 2, mb: 2, background: 'red' }}
-          >
-            Non, c'est une erreur. Annuler.
-          </Button>
-          <Button
-            className="deleteButton"
-            fullWidth
-            variant="contained"
-            onClick={handleSubmitDelete}
-            sx={{ mt: 2, mb: 2, background: 'green' }}
-          >
-            Oui, je suis sûr. Supprimer.
-          </Button>
-        </Box>
-      </Box>
-    </Modal>
+    <template>
+     {/* Utilisez le composant ConfirmationModal ici */}
+      <ConfirmationModal
+          open={open}
+          handleClose={handleClose}
+          title="Confirmation de suppression"
+          message="Êtes-vous sûr de vouloir supprimer ce compte ? Il n'y aura aucun retour en arrière possible."
+          handleCancel={handleClose}
+          handleConfirm={handleConfirmDeleteAction}
+        />
+    </template>
   );
 };
 

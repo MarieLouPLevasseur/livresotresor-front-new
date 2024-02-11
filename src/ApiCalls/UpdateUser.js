@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// TODO ne fonctionne pas depuis la refacto à réparer
-const patchApiUpdateUser = (routeApi, data, token, setAlert, setAlertMessage, setAlertSeverity, handleClose, dispatchDataOnStore) => {
+// USER datas
+const patchApiUpdateUser = (routeApi, data, token) => {
   return axios.patch(routeApi, data, {
     headers: {
       'Authorization': `Bearer ${token}`
@@ -21,4 +21,25 @@ const patchApiUpdateUser = (routeApi, data, token, setAlert, setAlertMessage, se
   });
 };
 
-export default patchApiUpdateUser;
+// KIDS datas
+const patchApiUpdatekid = (routeApi, data, token) => {
+  return axios.patch(routeApi, data, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
+  .then(function (response) {
+    console.log(response);
+    if (response.data.error === false) {
+      return true;
+    } else {
+      return false;
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+    return false;
+  });
+};
+
+export { patchApiUpdateUser, patchApiUpdatekid };

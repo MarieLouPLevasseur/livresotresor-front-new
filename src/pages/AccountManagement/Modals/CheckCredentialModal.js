@@ -14,8 +14,7 @@ const CheckCredentialModal = ({
         token,
         context,
         handleSubmitUpdateUser,
-        setOpenModalConfirmDeleteUser,
-        setOpenModalDeleteKid
+        setOpenModalConfirmDeleteAccount
     }) => {
 
     const [password, setPassword] = useState("");
@@ -37,9 +36,10 @@ const CheckCredentialModal = ({
                 if (context === 'updateUser') {
                     handleSubmitUpdateUser();
                 } else if (context === 'deleteUser') {
-                    setOpenModalConfirmDeleteUser(true);
+                    setOpenModalConfirmDeleteAccount(true);
                 } else if (context === 'deleteKid') {
-                    setOpenModalDeleteKid(true);
+                    console.log("je tente de supprimer un enfant")
+                    setOpenModalConfirmDeleteAccount(true);
                 }
 
                 // reset

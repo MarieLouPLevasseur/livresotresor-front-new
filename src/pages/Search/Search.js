@@ -24,7 +24,7 @@ function Search() {
   const [Cards, setCards] = useState([]);
   const [LoadingCards, setLoadingCards] = useState(false)
   const [Search, setSearch] = useState('');
-  const [setCompleteBookListState] = useState([]);
+  const [completeBookListState, setCompleteBookListState] = useState([]);
 
   // Set datas if User or Kid
   const isLogUser = useSelector((state) => state.user.isLogUser);

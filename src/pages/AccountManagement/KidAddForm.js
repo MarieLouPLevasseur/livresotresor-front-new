@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Card, Grid, TextField } from '@mui/material';
+import { Box, Card, Grid, TextField, Fab } from '@mui/material';
 import PasswordStrengthMeter from '../../Utils/Passwords/PasswordStrengthMeter/PasswordStrengthMeter';
 import Validate from '../AccountManagement/Validate/Validate';
 import { useTogglePasswordVisibility } from '../../Utils/Passwords/useTogglePasswordVisibility'; // Importez useTogglePasswordVisibility ici
@@ -76,7 +76,9 @@ const KidAddForm = ({
             <img edge="end" alt={rightIcon === "eye" ? "Set password visible" : "set password invisible"} src={rightIcon === "eye" ? OpenEye : CloseEye} size={22} onClick={handlePasswordVisibility} />
           </Grid>
         </Box>
-        <Validate handleSubmit={handleSubmitCreate} />
+        <Fab  title="Valider la création du compte enfant" className="createKid" sx={{ margin: '15px' }}>
+           <Validate handleSubmit={handleSubmitCreate} />
+        </Fab>
       </Card>
     </Box>
   );
