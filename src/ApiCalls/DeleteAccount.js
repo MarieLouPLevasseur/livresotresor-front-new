@@ -17,7 +17,6 @@ const deleteApiKid = (routeApi, token) => {
 };
 
 
-// TODO to complete
 const deleteApiUser = (routeApi, token) => {
   
   return axios.delete(routeApi, {

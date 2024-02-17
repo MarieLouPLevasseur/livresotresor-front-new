@@ -24,13 +24,13 @@ import { kidLogout } from '../../Utils/Slices/login/kidSlice';
 import { handleErrors } from '../../Utils/Errors/handleErrors';
 import { userFirstname, userLastname, userEmail} from '../../Utils/Slices/login/userSlice';
 
-
-
-
 // APIS
 import { deleteApiKid, deleteApiUser } from '../../ApiCalls/DeleteAccount';
 import {patchApiUpdateUser} from '../../ApiCalls/UpdateUser';
 import {patchApiUpdatekid} from '../../ApiCalls/UpdateUser';
+
+import { generateUserApiEndpoint, generateKidsApiEndpoint, generateDeleteUserApiEndpoint } from '../../Utils/apiEndpoints';
+
 
 // Context
 import { useSnackbar } from '../../Contexts/SnackBarContext';
@@ -94,13 +94,12 @@ function AccountManagement() {
   
   // Api Calls
   const apiUrl = useSelector((state) => state.api.apiUrl);
-  const apiEndpointKids = `/api/v1/users/${id}/kids`
-  const apiEndpointUsers = `/api/v1/users/${id}`
-  const apiEndpointDeleteUser = `/api/v1/users/delete/${id}`
+  // TODO : optimiser pour le deleteEndpointKid
+  const apiEndpointUsers = generateUserApiEndpoint(id);
+  const apiEndpointKids = generateKidsApiEndpoint(id);
+  const apiEndpointDeleteUser = generateDeleteUserApiEndpoint(id);
 
   
-  // TODO : ? ajouter une variable 'checked' lorsque la confirmation du mot de passe a été faites une fois. Cela évitera à l'utilisateur de rentrer sont code 50 fois apres confirmations
-  // TODO : ? valider un temps avant la remise à 0 du checked?
   // TODO : ? Envoyer une confirmation lors du changement de mot de passe par mail?  
   // TODO : ?vérifier les contraintes du mot de passe avant soumission?
   // TODO : lors de la mise à jour enfant, le state dans le kidCard ne se met pas à jour (l'état n'es tpas surveiller correctement après modification)
@@ -143,8 +142,6 @@ function AccountManagement() {
         setChangeDatas(false)
     }
   }, [id, changeDatas]);
-
-  // ! nouveaux APPEL: 
 
   // *************** DELETE Kid and User **************************
 
@@ -371,6 +368,7 @@ function AccountManagement() {
                   kid={kid}
                   setOpenModalConfirmDeleteAccount={setOpenModalConfirmDeleteAccount} // Passer la fonction handleOpendeleteKid comme prop
                   setContext={setContext}
+                  setIdKidToDelete={setIdKidToDelete}
                   handleSubmitUpdateKid={handleSubmitUpdateKid}
                 />
               ))}

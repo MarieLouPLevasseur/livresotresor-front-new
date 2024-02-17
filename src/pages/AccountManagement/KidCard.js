@@ -3,7 +3,7 @@ import { Box, Card, Typography, Grid, TextField, Fab } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const KidCard = ({ kid, setOpenModalConfirmDeleteAccount,setContext,handleSubmitUpdateKid }) => {     
+const KidCard = ({ kid, setOpenModalConfirmDeleteAccount,setContext,handleSubmitUpdateKid,setIdKidToDelete }) => {     
 
         const [kidUpdateUsernameValue, setKidUpdateUsernameValue] = useState(kid.username);
         const [kidUpdatePasswordValue, setKidUpdatePasswordValue] = useState("");
@@ -72,7 +72,7 @@ const KidCard = ({ kid, setOpenModalConfirmDeleteAccount,setContext,handleSubmit
                 <CheckCircleIcon />
             </Fab>
             <Fab  title="Supprimer l'enfant" sx={{backgroundColor:'#FB4747'}}>
-              <DeleteIcon sx={{backgroundColor:'#FB4747'}} onClick={() => [setOpenModalConfirmDeleteAccount(true), setContext("deleteKid")]} />
+              <DeleteIcon sx={{backgroundColor:'#FB4747'}} onClick={() => [setOpenModalConfirmDeleteAccount(true), setContext("deleteKid"),setIdKidToDelete(kid.id)]} />
             </Fab>
           </Box>
         </Box>
