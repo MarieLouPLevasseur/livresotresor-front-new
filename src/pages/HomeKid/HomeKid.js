@@ -47,6 +47,7 @@ function HomeKid() {
      })
 
   // set avatar
+  // TODO vérifier pourquoi il ne récupère l'image comme dans le reward. Problème récup avatar kid si user? 
     const avatar = useSelector(state => {
       if(isLogUser) {
           return state.user.kidAvatar
@@ -132,7 +133,7 @@ function HomeKid() {
         <Box sx={{display: 'flex', width: '70%', flexDirection: 'column', alignItems: 'center', mt: 2, margin:{xs:'auto'}}}>
         <Avatar
         alt="avatar enfant"
-        src={avatar}
+        src={avatar.url}
         sx={{ width: 150, height: 150 }}
         />
           <Typography sx={{ mt: 3, mb: 1, fontFamily: 'Montserrat', fontWeight: 600 }}>

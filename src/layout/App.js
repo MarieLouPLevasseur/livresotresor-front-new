@@ -50,6 +50,11 @@ import Footer from './Footer/Footer'
 import PageNotFound from '../pages/ErrorsPages/PageNotFound/PageNotFound';
 import NotAllowed from '../pages/ErrorsPages/NotAllowed/NotAllowed';
 import ErrorServer from '../pages/ErrorsPages/ErrorServer/Error';
+// ADMIN
+import AdminIndex from '../pages/Admin/Index/Index';
+import AdminAvatarIndex from '../pages/Admin/Avatars/Index';
+import AdminDiplomasIndex from '../pages/Admin/Diplomas/Index';
+import AdminUsersIndex from '../pages/Admin/Users/Index';
 
 import UserLogin from '../pages/LoginUser/LoginUser';
 import { userFirstname, userId, userKidAvatar, userKidId, userKidUsername,userKidFirstname, userLastname, userLogin , userEmail} from '../Utils/Slices/login/userSlice';
@@ -112,6 +117,14 @@ function App() {
     <SnackbarProvider>
       <Navbar />
       <Routes>
+       {/* ADMIN */}
+        {/* TODO: mettre les sécurité pour les roles admin uniquement */}
+      <Route path="/admin/index" element={<AdminIndex />} />
+       <Route path="/admin/diplomes/index" element={<AdminDiplomasIndex />} />
+       <Route path="/admin/utilisateurs/index" element={<AdminUsersIndex />} />
+       <Route path="/admin/avatars/index" element={<AdminAvatarIndex />} />
+
+       {/* Global */}
         <Route path="/" element={<Home />} />
         <Route path="/mentions-legales" element={<Legal />} />
         <Route path="/tutoriel" element={<Tutorial />} />
@@ -119,6 +132,7 @@ function App() {
         <Route path="/cookies" element={<Cookies />} />
         <Route path="/a-propos" element={<About />} />
         
+         {/* Connected */}
         {/* {isLogKid && <Route path="/inscription" element={<NotAllowed />} />} */}
         {!isLogKid && <Route path="/inscription" element={<Register />} />}
         <Route path="/connexion-enfant" element={<KidLogin />} />

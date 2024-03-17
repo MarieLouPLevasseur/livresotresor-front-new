@@ -23,14 +23,12 @@ import { userLogout } from '../../Utils/Slices/login/userSlice';
 import { kidLogout } from '../../Utils/Slices/login/kidSlice';
 import { handleErrors } from '../../Utils/Errors/handleErrors';
 import { userFirstname, userLastname, userEmail} from '../../Utils/Slices/login/userSlice';
+import { generateUserApiEndpoint, generateKidsApiEndpoint, generateDeleteUserApiEndpoint } from '../../Utils/apiEndpoints';
 
 // APIS
 import { deleteApiKid, deleteApiUser } from '../../ApiCalls/DeleteAccount';
 import {patchApiUpdateUser} from '../../ApiCalls/UpdateUser';
 import {patchApiUpdatekid} from '../../ApiCalls/UpdateUser';
-
-import { generateUserApiEndpoint, generateKidsApiEndpoint, generateDeleteUserApiEndpoint } from '../../Utils/apiEndpoints';
-
 
 // Context
 import { useSnackbar } from '../../Contexts/SnackBarContext';
