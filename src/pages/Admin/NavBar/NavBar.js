@@ -10,51 +10,35 @@ function NavBar() {
     <Box sx={{ display: 'flex', justifyContent: 'space-between', maxWidth: '80%', margin: 'auto' }}>
       <Button
         className='button'
-        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px' }}
+        component={NavLink} // Utiliser NavLink comme composant du bouton
+        to='/admin/index'
+        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px', textDecoration: 'none', color: 'inherit' }} // Appliquer les styles au bouton
       >
-        <NavLink
-          className={({ isActive }) => (isActive ? 'button button--active' : 'button')}
-          style={{ textDecoration: 'none' }}
-          to='/admin/index'
-        >
-         Index
-        </NavLink>
+        Index
       </Button>
       <Button
         className='button'
-        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px' }}
+        component={NavLink}
+        to='/admin/diplomes/index'
+        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px', textDecoration: 'none', color: 'inherit' }}
       >
-        <NavLink
-          className={({ isActive }) => (isActive ? 'button button--active' : 'button')}
-          style={{ textDecoration: 'none' }}
-          to='/admin/diplomes/index'
-        >
-          Diplomes
-        </NavLink>
+        Diplomes
       </Button>
       <Button
         className='button'
-        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px' }}
+        component={NavLink}
+        to='/admin/avatars/index'
+        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px', textDecoration: 'none', color: 'inherit' }}
       >
-        <NavLink
-          className={({ isActive }) => (isActive ? 'button button--active' : 'button')}
-          style={{ textDecoration: 'none' }}
-          to='/admin/avatars/index'
-        >
-          Avatars
-        </NavLink>
+        Avatars
       </Button>
       <Button
         className='button'
-        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px' }}
+        component={NavLink}
+        to='/admin/utilisateurs/index'
+        sx={{ my: 2, fontFamily: 'Montserrat', minWidth: '200px', textDecoration: 'none', color: 'inherit' }}
       >
-        <NavLink
-          className={({ isActive }) => (isActive ? 'button button--active' : 'button')}
-          style={{ textDecoration: 'none' }}
-          to='/admin/utilisateurs/index'
-        >
-          Utilisateurs
-        </NavLink>
+        Utilisateurs
       </Button>
     </Box>
   );
