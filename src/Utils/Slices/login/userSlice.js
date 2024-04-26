@@ -5,6 +5,7 @@ const initialState = {
   isLogUser: false,
   token: "",
   userId: "",
+  role:"",
   firstname: "",
   lastname: "",
   email: "",
@@ -25,6 +26,9 @@ export const userSlice = createSlice({
     //******* */ modif ML ***************
     userId: (state, action) => {
       state.userId = action.payload
+    },
+    role: (state, action) => {
+      state.role = action.payload
     },
     userFirstname: (state, action) => {
       state.firstname = action.payload
@@ -58,6 +62,7 @@ export const userSlice = createSlice({
       state.kidAvatar= ""
       state.kidUsername= ""
       state.kidFirstname = ""
+      state.role = ""
     },
     userToken: (state, action) => {
       state.token = action.payload
@@ -65,6 +70,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { userToken, userLogin, userId, userFirstname, userLastname, userLogout , userKidId, userKidAvatar , userKidUsername, userKidFirstname, userEmail} = userSlice.actions
+export const { role, userToken, userLogin, userId, userFirstname, userLastname, userLogout , userKidId, userKidAvatar , userKidUsername, userKidFirstname, userEmail} = userSlice.actions
 
 export default userSlice.reducer

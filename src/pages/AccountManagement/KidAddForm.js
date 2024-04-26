@@ -76,9 +76,9 @@ const KidAddForm = ({
             <img edge="end" alt={rightIcon === "eye" ? "Set password visible" : "set password invisible"} src={rightIcon === "eye" ? OpenEye : CloseEye} size={22} onClick={handlePasswordVisibility} />
           </Grid>
         </Box>
-        <Fab  title="Valider la création du compte enfant" className="createKid" sx={{ margin: '15px' }}>
+        <div  title="Valider la création du compte enfant" className="createKid" sx={{ margin: '15px' }}>
            <Validate handleSubmit={handleSubmitCreate} />
-        </Fab>
+        </div>
       </Card>
     </Box>
   );

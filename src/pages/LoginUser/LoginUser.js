@@ -14,7 +14,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userLastname, userLogin, userId, userFirstname, userEmail } from '../../Utils/Slices/login/userSlice';
+import { role, userLastname, userLogin, userId, userFirstname, userEmail } from '../../Utils/Slices/login/userSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
@@ -129,6 +129,20 @@ export default function UserLogin() {
 
   // ****  Api Call ******
   // Login
+
+  const mapRole = (role) => {
+    switch (role) {
+      case "ROLE_ADMIN":
+        return "admin";
+      case "ROLE_USER":
+        return "user";
+      case "ROLE_KID":
+        return "kid";
+      default:
+        return "unknown"; // ou autre valeur par défaut si nécessaire
+    }
+  };
+
   const postApiLogin = (routeApi, data) => {
     setLoadingSpinner(true); 
 
@@ -142,20 +156,24 @@ export default function UserLogin() {
         const { token } = response.data;
 
 
-        const { id, firstname, lastname, email } = response.data.user;
-        console.log(id, firstname, lastname, email);
+        const { id, firstname, lastname, email, roles } = response.data.user;
+       // Mapper les rôles
+      const userRole = roles && roles.length > 0 ? mapRole(roles[0]) : "unknown";
+        
         localStorage.setItem('user', JSON.stringify({
           token,
           id,
           firstname,
           lastname,
-          email
+          email,
+          role
         }));
         dispatch(userLogin(token))
         dispatch(userId(id))
         dispatch(userFirstname(firstname))
         dispatch(userLastname(lastname))
         dispatch(userEmail(email))
+        dispatch(role(userRole));
       })
       .catch(function (error) {
         console.log(error);

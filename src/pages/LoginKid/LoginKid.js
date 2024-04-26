@@ -15,7 +15,7 @@ import MuiAlert from '@mui/material/Alert';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { kidLogin, kidId, kidUsername, kidAvatar, kidFirstname } from '../../Utils/Slices/login/kidSlice';
+import { role, kidLogin, kidId, kidUsername, kidAvatar, kidFirstname } from '../../Utils/Slices/login/kidSlice';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 
@@ -111,6 +111,19 @@ export default function KidLogin() {
     // }, 1000)
   }});
 
+  const mapRole = (role) => {
+    switch (role) {
+      case "ROLE_ADMIN":
+        return "admin";
+      case "ROLE_USER":
+        return "user";
+      case "ROLE_KID":
+        return "kid";
+      default:
+        return "unknown"; // ou autre valeur par défaut si nécessaire
+    }
+  };
+
   // Api Call
   const postApi = (routeApi ,data) => {
 
@@ -121,22 +134,24 @@ export default function KidLogin() {
     },
     })
     .then(function (response) {
-      console.log(response.data);
+      // console.log(response.data);
       const { token } = response.data;
-      const { id, username, profil_avatar,firstname } = response.data.user;
-      console.log(id, username, profil_avatar,firstname);
+      const { id, username, profil_avatar,firstname, roles } = response.data.user;
+      const userRole = roles && roles.length > 0 ? mapRole(roles[0]) : "unknown";
       localStorage.setItem('kid', JSON.stringify({
         token,
         id,
         username,
         profil_avatar,
-        firstname
+        firstname,
+        role
       }));
       dispatch(kidLogin(token))
       dispatch(kidId(id))
       dispatch(kidUsername(username))
       dispatch(kidFirstname(firstname))
       dispatch(kidAvatar(profil_avatar))
+      dispatch(role(userRole));
     })
     .catch(function (error) {
       console.log(error);

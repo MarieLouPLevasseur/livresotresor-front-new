@@ -1,27 +1,4 @@
-// import logo from '../assets/img/logo.svg';
-// import '../assets/styles/App.css';
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
-// export default App;
 
 
 import React from 'react';
@@ -72,16 +49,13 @@ function App() {
   const dispatch = useDispatch();
 
   const isLogUser = useSelector((state) => state.user.isLogUser);
-  console.log(isLogUser, "test is LogUser")
   const isLogKid = useSelector((state) => state.kid.isLogKid);
-  console.log(isLogKid, "test is LogKid")
 
   useEffect(() => {
     const loggedUser = JSON.parse(localStorage.getItem('user'));
     const loggedUserKids = JSON.parse(localStorage.getItem('userKids'));
     const loggedKid = JSON.parse(localStorage.getItem('kid'));
     const progressKid = JSON.parse(localStorage.getItem('kidProgress'));
-    console.log(isLogUser, "user logged dans useeffect")
     if (loggedUser) {
       dispatch(userLogin(loggedUser.token));
 
@@ -92,10 +66,15 @@ function App() {
       dispatch(userEmail(loggedUser.email));
 
   // set kid user data only
-      dispatch(userKidAvatar(loggedUserKids.avatar));
-      dispatch(userKidUsername(loggedUserKids.username));
-      dispatch(userKidFirstname(loggedUserKids.firstname));
-      dispatch(userKidId(loggedUserKids.kidId));
+    const kidAvatar = loggedUserKids ? loggedUserKids.avatar : null;
+    const KidUsername = loggedUserKids ? loggedUserKids.username : null;
+    const kidFirstname = loggedUserKids ? loggedUserKids.firstname : null;
+    const KidId = loggedUserKids ? loggedUserKids.kidId : null;
+
+      dispatch(userKidAvatar(kidAvatar));
+      dispatch(userKidUsername(KidUsername));
+      dispatch(userKidFirstname(kidFirstname));
+      dispatch(userKidId(KidId));
 
   // set kid data if connected directly only
 
@@ -110,7 +89,6 @@ function App() {
     }
   },[]);
 
-  const notForKids = isLogUser || !isLogKid;
 
   return (
     <div className="App">
@@ -119,11 +97,11 @@ function App() {
       <Routes>
        {/* ADMIN */}
         {/* TODO: mettre les sécurité pour les roles admin uniquement */}
-      <Route path="/admin/index" element={<AdminIndex />} />
+       <Route path="/admin/index" element={<AdminIndex />} />
        <Route path="/admin/diplomes/index" element={<AdminDiplomasIndex />} />
        <Route path="/admin/utilisateurs/index" element={<AdminUsersIndex />} />
        <Route path="/admin/avatars/index" element={<AdminAvatarIndex />} />
-
+        
        {/* Global */}
         <Route path="/" element={<Home />} />
         <Route path="/mentions-legales" element={<Legal />} />
