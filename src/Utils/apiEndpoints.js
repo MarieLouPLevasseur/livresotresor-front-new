@@ -6,3 +6,4 @@ export const generateDeleteUserApiEndpoint = (id) => `/api/v1/users/delete/${id}
 export const generateAdminUsersApiEndpoint = (id) => '/api/v1/admin/users';
 export const generateAdminAvatarsApiEndpoint = (id) => '/api/v1/admin/avatars';
 export const generateAdminDiplomasApiEndpoint = (id) => '/api/v1/admin/diplomas';
+export const generateAdminGetAvatarApiEndpoint = (id) => `/api/v1/admin/avatars/${id}`;

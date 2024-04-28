@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+  // TODO changer la valeur en dynamique pour production?
   apiUrl: 'http://localhost:8000',
 }
 

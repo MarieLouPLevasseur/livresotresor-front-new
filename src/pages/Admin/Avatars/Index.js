@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography} from '@mui/material'
-import AdminNavBar from '../NavBar/NavBar';
 import { useSelector } from 'react-redux';
 
 // COMPONENT
+import AdminNavBar from '../NavBar/NavBar';
 import AvatarsList from './AvatarsList';
 
 // APIS

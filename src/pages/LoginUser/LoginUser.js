@@ -152,7 +152,7 @@ export default function UserLogin() {
       },
     })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         const { token } = response.data;
 
 
@@ -192,7 +192,7 @@ export default function UserLogin() {
       },
     })
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
         setAlertSuccessReset(true)
         setOpenModal(false)
         setLoadingData(false)

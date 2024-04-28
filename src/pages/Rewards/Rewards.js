@@ -28,9 +28,6 @@ function Rewards() {
  const isLogUser = useSelector((state) => state.user.isLogUser);
  const isLogKid = useSelector((state) => state.kid.isLogKid);
 
- console.log(isLogUser);
- console.log(isLogKid);
-
   // set token
   const token = useSelector(state => {
     if(isLogUser) {
@@ -74,7 +71,6 @@ function Rewards() {
 const [currentAvatarToSetValue, setCurrentAvatarToSetValue] = useState("");
 
 // Error states
-// const [alertErrorSubmit, setAlertErrorSubmit] = useState(false);
 const [ setAlertErrorLogin] = useState(false);
 
 
@@ -136,30 +132,33 @@ const [ setAlertErrorLogin] = useState(false);
 
   const dispatch = useDispatch();
 
-   const handleClickAvatar = (url) => {
-     setCurrentAvatarToSetValue(url);
-    //  console.log(url);
+  const handleClickAvatar = (avatarId, avatarUrl) => {
+    setCurrentAvatarToSetValue(avatarId);
 
 
 
-    // onChange={()=>{setCurrentAvatarToSetValue()}}
       const newAvatarToset = {
-        profile_avatar: currentAvatarToSetValue,
+        // profile_avatar: currentAvatarToSetValue,
+        currentAvatar: avatarId,
       };
 
 
-      // console.log(currentAvatarToSetValue);
        const newAvatarTosetJson = JSON.stringify(newAvatarToset);
      patchApi(apiUrl + apiEndpointSetAvatar,newAvatarTosetJson);
 
 
-     if(isLogUser) {
-        dispatch(userKidAvatar(url))
-      }
-      else{
-        dispatch (kidAvatar(url))
+    if (isLogUser) {
+      dispatch(userKidAvatar(avatarUrl));
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      storedUser.kidAvatar = avatarUrl;
+      localStorage.setItem('user', JSON.stringify(storedUser));
+    } else {
+      dispatch(kidAvatar(avatarUrl));
+      const storedKid = JSON.parse(localStorage.getItem('kid'));
+      storedKid.profil_avatar = avatarUrl;
+      localStorage.setItem('kid', JSON.stringify(storedKid));
 
-      }
+    }
 
    };
 
@@ -221,7 +220,12 @@ const [ setAlertErrorLogin] = useState(false);
      
             <Tooltip title="Choisis moi comme avatar" placement="top">
 
-              <img className='avatarImage' src={image.url} alt='avatar'  onClick={(e)=> {handleClickAvatar(e.target.src)}}  />
+              <img
+                className="avatarImage"
+                src={image.url}
+                alt="avatar"
+                onClick={(e) => handleClickAvatar(image.id, image.url)}
+              />
             </Tooltip>
  
             </ImageListItem>

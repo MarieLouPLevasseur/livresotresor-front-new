@@ -41,9 +41,9 @@ function HomeUser() {
     }
     })
     .then((response) => {
-      // console.log(response.data)
+      // console.log("response.data kidsValue",response.data)
       setKidsValue(response.data);
-      //  console.log(KidsValue);
+      //  console.log("kidsValue: ",KidsValue);
        setLoadingKidsValue(false)
     })
     .catch((error) => {
@@ -76,7 +76,7 @@ function HomeUser() {
       {KidsValue.map((e) => (
       <Card key={e.id} className='card' variant='outlined' sx={{border:'1px solid #4462A5', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width:'70%', margin: 'auto', marginBottom:'30px', background: '#'}}>
         <Typography sx={{fontSize: '1.4rem', padding:'30px', fontFamily: 'montserrat'}}> Compte enfant : {e.firstname}  </Typography>
-        <ButtonList kidId={e.id} username={e.username} avatar={e.profile_avatar}/>
+        <ButtonList kidId={e.id} username={e.username} avatar={e.avatar}/>
 
       </Card>
       ))} 

@@ -33,6 +33,11 @@ import AdminAvatarIndex from '../pages/Admin/Avatars/Index';
 import AdminDiplomasIndex from '../pages/Admin/Diplomas/Index';
 import AdminUsersIndex from '../pages/Admin/Users/Index';
 
+import AdminUpdateAvatar from '../pages/Admin/Avatars/UpdateAvatarsList';
+// import AdminAvatarIndex from '../pages/Admin/Avatars/Index';
+// import AdminDiplomasIndex from '../pages/Admin/Diplomas/Index';
+// import AdminUsersIndex from '../pages/Admin/Users/Index';
+
 import UserLogin from '../pages/LoginUser/LoginUser';
 import { userFirstname, userId, userKidAvatar, userKidId, userKidUsername,userKidFirstname, userLastname, userLogin , userEmail} from '../Utils/Slices/login/userSlice';
 import { kidAvatar, kidId, kidLogin, kidUsername, kidProgress, kidFirstname } from '../Utils/Slices/login/kidSlice';
@@ -97,10 +102,13 @@ function App() {
       <Routes>
        {/* ADMIN */}
         {/* TODO: mettre les sécurité pour les roles admin uniquement */}
+         {/* index */}
        <Route path="/admin/index" element={<AdminIndex />} />
        <Route path="/admin/diplomes/index" element={<AdminDiplomasIndex />} />
        <Route path="/admin/utilisateurs/index" element={<AdminUsersIndex />} />
        <Route path="/admin/avatars/index" element={<AdminAvatarIndex />} />
+        {/* update */}
+       <Route path="/admin/avatars/edit/:id" element={<AdminUpdateAvatar />} />
         
        {/* Global */}
         <Route path="/" element={<Home />} />

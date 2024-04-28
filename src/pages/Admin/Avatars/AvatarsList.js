@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Paper } from '@mui/material';
+import { useNavigate  } from 'react-router-dom';
+import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Paper , Button } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 
 function AvatarsList({ avatars }) {
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
   const [expandedImage, setExpandedImage] = useState(null);
+  const navigate = useNavigate();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -19,9 +21,15 @@ function AvatarsList({ avatars }) {
     }
   };
 
+  const handleClick = (id) => {
+
+    navigate('/admin/avatars/edit/' + id);
+
+  };
+
   return (
     <div>
-      <Typography variant="h2">Avatars</Typography>
+
       <Paper elevation={3} style={{ marginTop: '20px' }}>
         <Table>
           <TableHead>
@@ -30,6 +38,8 @@ function AvatarsList({ avatars }) {
               <TableCell style={{ backgroundColor: '#ACCBF7' }}>niveau</TableCell>
               <TableCell style={{ backgroundColor: '#ACCBF7' }}>Aperçu</TableCell>
               <TableCell style={{ backgroundColor: '#ACCBF7' }}>Url</TableCell>
+              <TableCell style={{ backgroundColor: '#ACCBF7' }}>Actions</TableCell> 
+
             </TableRow>
           </TableHead>
           <TableBody>
@@ -46,6 +56,9 @@ function AvatarsList({ avatars }) {
                   />
                 </TableCell>
                 <TableCell>{avatar.url}</TableCell>
+                <TableCell>
+                <Button onClick={() => handleClick(avatar.id)}>Modifier</Button> {/* Bouton pour modifier l'avatar */}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

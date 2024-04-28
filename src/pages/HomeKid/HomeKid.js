@@ -26,42 +26,35 @@ function HomeKid() {
     // Set datas if User or Kid
     const isLogUser = useSelector((state) => state.user.isLogUser);
     const isLogKid = useSelector((state) => state.kid.isLogKid);
-  
-    console.log(isLogUser);
-    console.log(isLogKid);
+    // console.log(isLogUser);
+    // console.log(isLogKid);
 
-  // set token
-    const token = useSelector(state => {
-      if(isLogUser) {
-          return state.user.token
-      }
-      return state.kid.token;
-     })
+   // Récupérer les informations depuis le state Redux
+   const userState = useSelector((state) => state.user);
+   const kidState = useSelector((state) => state.kid);
+ 
+  //  console.log('State Redux user:', userState);
+  //  console.log('State Redux kid:', kidState);
+ 
+   let token, username, avatar, id;
 
-  // set username
-    const username = useSelector(state => {
-      if(isLogUser) {
-          return state.user.kidFirstname
-      }
-      return state.kid.firstname;
-     })
+  if (isLogUser) {
+    token = userState.token;
+    username = userState.kidUsername;
+    avatar = userState.kidAvatar;
+    id = userState.kidId;
+  } else if (isLogKid) {
+    token = kidState.token;
+    username = kidState.username;
+    avatar = kidState.avatar;
+    id = kidState.id;
+  }
 
-  // set avatar
-  // TODO vérifier pourquoi il ne récupère l'image comme dans le reward. Problème récup avatar kid si user? 
-    const avatar = useSelector(state => {
-      if(isLogUser) {
-          return state.user.kidAvatar
-      }
-      return state.kid.avatar;
-     })
-  
-  // set id
-    const id = useSelector(state => {
-      if(isLogUser) {
-          return state.user.kidId
-      }
-      return state.kid.id;
-     })
+  // console.log('Token:', token);
+  // console.log('Username:', username);
+  // console.log('Avatar:', avatar);
+  // console.log('ID:', id);
+
 
   const progress = useSelector((state) => state.kid.progress)
   const dispatch = useDispatch();
@@ -132,9 +125,9 @@ function HomeKid() {
         <BookIconeMenu/>
         <Box sx={{display: 'flex', width: '70%', flexDirection: 'column', alignItems: 'center', mt: 2, margin:{xs:'auto'}}}>
         <Avatar
-        alt="avatar enfant"
-        src={avatar.url}
-        sx={{ width: 150, height: 150 }}
+          alt="avatar enfant"
+          src={avatar}
+          sx={{ width: 150, height: 150 }}
         />
           <Typography sx={{ mt: 3, mb: 1, fontFamily: 'Montserrat', fontWeight: 600 }}>
             Niveau {progress.currentLevel}

@@ -1,9 +1,9 @@
-// FetchIndexAdmin.js
+// FetchShowOne.js
 
 import axios from 'axios';
 
-const FetchIndexAdmin = async (baseUrl,endpoint,token) => {
-    const routeApi = baseUrl + endpoint;
+const FetchShowOneAdmin = async (baseUrl,endpoint,token,id) => {
+    const routeApi = baseUrl + endpoint + id;
     try {
         const response = await axios.get(routeApi, {
           headers: {
@@ -12,9 +12,9 @@ const FetchIndexAdmin = async (baseUrl,endpoint,token) => {
         });
         return response.data;
       } catch (error) {
-        console.error('Error fetching :', error);
+        console.error('Error fetching one :', error);
         throw error;
       }
 };
 
-export default FetchIndexAdmin;
+export default FetchShowOneAdmin;
